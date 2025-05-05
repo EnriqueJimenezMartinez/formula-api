@@ -55,27 +55,20 @@ return function (RouteBuilder $routes): void {
          * its action called 'display', and we pass a param to select the view file
          * to use (in this case, templates/Pages/home.php)...
          */
-        $builder->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
+        $builder->connect('/', ['controller' => 'Users', 'action' => 'index', 'prefix' => 'Admin']);
 
-        /*
-         * ...and connect the rest of 'Pages' controller's URLs.
-         */
-        $builder->connect('/pages/*', 'Pages::display');
+    });
 
-        /*
-         * Connect catchall routes for all controllers.
-         *
-         * The `fallbacks` method is a shortcut for
-         *
-         * ```
-         * $builder->connect('/{controller}', ['action' => 'index']);
-         * $builder->connect('/{controller}/{action}/*', []);
-         * ```
-         *
-         * It is NOT recommended to use fallback routes after your initial prototyping phase!
-         * See https://book.cakephp.org/5/en/development/routing.html#fallbacks-method for more information
-         */
-        $builder->fallbacks();
+    $routes->prefix('Admin', function (RouteBuilder $routes) {
+        // All routes here will be prefixed with `/admin`, and
+        // have the `'prefix' => 'Admin'` route element added that
+        // will be required when generating URLs for these routes
+        $routes->connect('/', ['controller' => 'Users', 'action' => 'index']);
+        $routes->fallbacks(DashedRoute::class);
+    });
+
+    $routes->prefix('Api', function (RouteBuilder $routes) {
+        $routes->fallbacks(DashedRoute::class);
     });
 
     /*
