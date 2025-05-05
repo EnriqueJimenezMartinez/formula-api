@@ -33,6 +33,10 @@ class CreateNews extends BaseMigration
             'default' => null,
             'null' => false,
         ]);
+        $table->addColumn('user_id', 'integer', [
+            'default' => null,
+            'null' => false,
+        ]);
         $table->addColumn('is_active', 'boolean', [
             'default' => null,
             'null' => false,
@@ -47,18 +51,19 @@ class CreateNews extends BaseMigration
         ]);
         $table->addIndex([
             'title',
-        
+
             ], [
             'name' => 'UNIQUE_TITLE',
             'unique' => true,
         ]);
         $table->addIndex([
             'slug',
-        
+
             ], [
             'name' => 'UNIQUE_SLUG',
             'unique' => true,
         ]);
+        $table->addForeignKey('user_id','users','id');
         $table->create();
     }
 }
