@@ -1,17 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Test\TestCase\Controller\Admin;
+namespace App\Test\TestCase\Controller\Api;
 
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Controller\Admin\NewsController Test Case
+ * App\Controller\Api\UsersController Test Case
  *
- * @uses \App\Controller\Admin\NewsController
+ * @uses \App\Controller\Api\UsersController
  */
-class NewsControllerTest extends TestCase
+class UsersControllerTest extends TestCase
 {
     use IntegrationTestTrait;
 
@@ -21,17 +21,15 @@ class NewsControllerTest extends TestCase
      * @var list<string>
      */
     protected array $fixtures = [
-        'app.News',
         'app.Users',
-        'app.Tags',
-        'app.NewsTags',
+        'app.News',
     ];
 
     /**
      * Test index method
      *
      * @return void
-     * @uses \App\Controller\Admin\NewsController::index()
+     * @uses \App\Controller\Api\UsersController::index()
      */
     public function testIndex(): void
     {
@@ -42,7 +40,7 @@ class NewsControllerTest extends TestCase
      * Test view method
      *
      * @return void
-     * @uses \App\Controller\Admin\NewsController::view()
+     * @uses \App\Controller\Api\UsersController::view()
      */
     public function testView(): void
     {
@@ -53,7 +51,7 @@ class NewsControllerTest extends TestCase
      * Test add method
      *
      * @return void
-     * @uses \App\Controller\Admin\NewsController::add()
+     * @uses \App\Controller\Api\UsersController::add()
      */
     public function testAdd(): void
     {
@@ -64,7 +62,7 @@ class NewsControllerTest extends TestCase
      * Test edit method
      *
      * @return void
-     * @uses \App\Controller\Admin\NewsController::edit()
+     * @uses \App\Controller\Api\UsersController::edit()
      */
     public function testEdit(): void
     {
@@ -75,7 +73,7 @@ class NewsControllerTest extends TestCase
      * Test delete method
      *
      * @return void
-     * @uses \App\Controller\Admin\NewsController::delete()
+     * @uses \App\Controller\Api\UsersController::delete()
      */
     public function testDelete(): void
     {

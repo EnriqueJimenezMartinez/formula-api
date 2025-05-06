@@ -2,7 +2,10 @@
 declare(strict_types=1);
 
 namespace App\Controller\Admin;
+
 use App\Controller\AppController;
+use Cake\Event\EventInterface;
+
 /**
  * Users Controller
  *
@@ -30,7 +33,7 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
+    public function view(?string $id = null)
     {
         $user = $this->Users->get($id, contain: ['News']);
         $this->set(compact('user'));
@@ -63,7 +66,7 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function edit($id = null)
+    public function edit(?string $id = null)
     {
         $user = $this->Users->get($id, contain: []);
         if ($this->request->is(['patch', 'post', 'put'])) {
@@ -85,7 +88,7 @@ class UsersController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
+    public function delete(?string $id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
@@ -97,7 +100,8 @@ class UsersController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
-    public function beforeFilter(\Cake\Event\EventInterface $event)
+
+    public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
         // Configure the login action to not require authentication, preventing
@@ -124,6 +128,7 @@ class UsersController extends AppController
             $this->Flash->error(__('Invalid username or password'));
         }
     }
+
     public function logout()
     {
         $result = $this->Authentication->getResult();

@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Test\TestCase\Controller\Admin;
+namespace App\Test\TestCase\Controller\Api;
 
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Controller\Admin\NewsController Test Case
+ * App\Controller\Api\NewsController Test Case
  *
- * @uses \App\Controller\Admin\NewsController
+ * @uses \App\Controller\Api\NewsController
  */
 class NewsControllerTest extends TestCase
 {
@@ -31,7 +31,7 @@ class NewsControllerTest extends TestCase
      * Test index method
      *
      * @return void
-     * @uses \App\Controller\Admin\NewsController::index()
+     * @uses \App\Controller\Api\NewsController::index()
      */
     public function testIndex(): void
     {
@@ -42,7 +42,7 @@ class NewsControllerTest extends TestCase
      * Test view method
      *
      * @return void
-     * @uses \App\Controller\Admin\NewsController::view()
+     * @uses \App\Controller\Api\NewsController::view()
      */
     public function testView(): void
     {
@@ -53,7 +53,7 @@ class NewsControllerTest extends TestCase
      * Test add method
      *
      * @return void
-     * @uses \App\Controller\Admin\NewsController::add()
+     * @uses \App\Controller\Api\NewsController::add()
      */
     public function testAdd(): void
     {
@@ -64,7 +64,7 @@ class NewsControllerTest extends TestCase
      * Test edit method
      *
      * @return void
-     * @uses \App\Controller\Admin\NewsController::edit()
+     * @uses \App\Controller\Api\NewsController::edit()
      */
     public function testEdit(): void
     {
@@ -75,7 +75,7 @@ class NewsControllerTest extends TestCase
      * Test delete method
      *
      * @return void
-     * @uses \App\Controller\Admin\NewsController::delete()
+     * @uses \App\Controller\Api\NewsController::delete()
      */
     public function testDelete(): void
     {

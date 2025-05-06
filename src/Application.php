@@ -16,6 +16,12 @@ declare(strict_types=1);
  */
 namespace App;
 
+use App\Error\ApiExceptionRenderer;
+use Authentication\AuthenticationService;
+use Authentication\AuthenticationServiceInterface;
+use Authentication\AuthenticationServiceProviderInterface;
+use Authentication\Identifier\AbstractIdentifier;
+use Authentication\Middleware\AuthenticationMiddleware;
 use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
 use Cake\Datasource\FactoryLocator;
@@ -27,10 +33,6 @@ use Cake\Http\MiddlewareQueue;
 use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
-use Authentication\AuthenticationService;
-use Authentication\AuthenticationServiceInterface;
-use Authentication\AuthenticationServiceProviderInterface;
-use Authentication\Middleware\AuthenticationMiddleware;
 use Cake\Routing\Router;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -57,9 +59,10 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         if (PHP_SAPI !== 'cli') {
             FactoryLocator::add(
                 'Table',
-                (new TableLocator())->allowFallbackClass(false)
+                (new TableLocator())->allowFallbackClass(false),
             );
         }
+        $this->addPlugin('Authentication');
     }
 
     /**
@@ -73,7 +76,9 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         $middlewareQueue
             // Catch any exceptions in the lower layers,
             // and make an error page/response
-            ->add(new ErrorHandlerMiddleware(Configure::read('Error'), $this))
+            ->add(new ErrorHandlerMiddleware([
+                'exceptionRenderer' => ApiExceptionRenderer::class,
+            ], $this))
 
             // Handle plugin/theme assets like CakePHP normally does.
             ->add(new AssetMiddleware([
@@ -91,12 +96,30 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             // https://book.cakephp.org/5/en/controllers/middleware.html#body-parser-middleware
             ->add(new BodyParserMiddleware())
 
-            ->add(new AuthenticationMiddleware($this))
+            ->add(new AuthenticationMiddleware($this));
+            /*->add(function ($request, $handler) {
+                if ($request->getParam('prefix') === 'Admin') {
+                    $service = $this->getAuthenticationService($request);
+                    $authMiddleware = new \Authentication\Middleware\AuthenticationMiddleware($service);
+                    return $authMiddleware->process($request, $handler);
+                }
+
+                return $handler->handle($request);
+            })*/
             // Cross Site Request Forgery (CSRF) Protection Middleware
             // https://book.cakephp.org/5/en/security/csrf.html#cross-site-request-forgery-csrf-middleware
-            ->add(new CsrfProtectionMiddleware([
-                'httponly' => true,
-            ]));
+            $csrf = new CsrfProtectionMiddleware([
+                'httpOnly' => true,
+            ]);
+            $csrf->skipCheckCallback(function (ServerRequestInterface $request): bool {
+                // Si el prefijo es “api”, NO aplicamos CSRF
+                    $params = $request->getAttribute('params') ?? [];
+                    $params = $request->getAttribute('params') ?? [];
+                    $prefix = isset($params['prefix']) ? strtolower((string)$params['prefix']) : '';
+
+                return $prefix === 'api';
+            });
+            $middlewareQueue->add($csrf);
 
         return $middlewareQueue;
     }
@@ -111,40 +134,75 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
     public function services(ContainerInterface $container): void
     {
     }
+
     public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
-{
-    $authenticationService = new AuthenticationService([
-        'unauthenticatedRedirect' => Router::url([
-            'controller' =>  'Users',
-            'action' => 'login',
-            'prefix' => 'Admin',
-        ]),
-        'queryParam' => 'redirect',
-    ]);
+    {
 
-    // Load identifiers, ensure we check email and password fields
-    $authenticationService->loadIdentifier('Authentication.Password', [
-        'fields' => [
-            'username' => 'email',
-            'password' => 'password',
-        ],
-    ]);
+        // Load the authenticators, you want session first
+        $prefix = $request->getAttribute('params')['prefix'] ?? null;
+        if ($prefix === 'Api') {
+            $authenticationService = new AuthenticationService([
+                'unauthenticatedRedirect' => null,
+                'queryParam'              => null,
+                'unauthenticatedHandler'  => [
+                    'className' => 'Authentication.HttpUnauthorizedHandler',
+                    'config'    => [
+                        'wwwAuthenticate' => 'Bearer realm="api"',
+                    ],
+                ],
+            ]);
+            // --- Scope API: solo JWT ---
+            $authenticationService->loadIdentifier('Authentication.JwtSubject');
+            $authenticationService->loadAuthenticator('Authentication.Jwt', [
+                // Tu secret salt en config/app.php > Security.salt
+                'secretKey'    => Configure::read('JWT_SECRET'),
+                'header'       => 'Authorization',
+                'tokenPrefix'  => 'Bearer',
+                'algorithm'    => 'HS256',
+                // opcional: permitir token en query (?token=…)
+                //'queryParam'   => 'token',
+            ]);
+            $fields = [
+                AbstractIdentifier::CREDENTIAL_USERNAME => 'email',
+                AbstractIdentifier::CREDENTIAL_PASSWORD => 'password',
+            ];
+            $authenticationService->loadIdentifier('Authentication.Password', compact('fields'));
+            $authenticationService->loadAuthenticator('Authentication.Form', [
+                'fields'   => $fields,
+                'loginUrl' => '/api/users/login',
+            ]);
+        } else {
+            $authenticationService = new AuthenticationService([
+                'unauthenticatedRedirect' => Router::url([
+                    'controller' =>  'Users',
+                    'action' => 'login',
+                    'prefix' => 'Admin',
+                ]),
+                'queryParam' => 'redirect',
+            ]);
 
-    // Load the authenticators, you want session first
-    $authenticationService->loadAuthenticator('Authentication.Session');
-    // Configure form data check to pick email and password
-    $authenticationService->loadAuthenticator('Authentication.Form', [
-        'fields' => [
-            'username' => 'email',
-            'password' => 'password',
-        ],
-        'loginUrl' => Router::url([
-            'controller' =>  'Users',
-            'action' => 'login',
-            'prefix' => 'Admin',
-        ]),
-    ]);
+            // Load identifiers, ensure we check email and password fields
+            $authenticationService->loadIdentifier('Authentication.Password', [
+                'fields' => [
+                    'username' => 'email',
+                    'password' => 'password',
+                ],
+            ]);
+            $authenticationService->loadAuthenticator('Authentication.Session');
+            // Configure form data check to pick email and password
+            $authenticationService->loadAuthenticator('Authentication.Form', [
+                'fields' => [
+                    'username' => 'email',
+                    'password' => 'password',
+                ],
+                'loginUrl' => Router::url([
+                    'controller' =>  'Users',
+                    'action' => 'login',
+                    'prefix' => 'Admin',
+                ]),
+            ]);
+        }
 
-    return $authenticationService;
-}
+        return $authenticationService;
+    }
 }

@@ -20,13 +20,13 @@ class CreateNewsTags extends BaseMigration
             'limit' => 11,
             'null' => false,
         ]);
-        $table->addColumn('tags_id', 'integer', [
+        $table->addColumn('tag_id', 'integer', [
             'default' => null,
             'limit' => 11,
             'null' => false,
         ]);
         $table->addForeignKey('news_id','news','id');
-        $table->addForeignKey('tags_id','tags','id');
+        $table->addForeignKey('tag_id','tags','id');
         $table->create();
     }
 }

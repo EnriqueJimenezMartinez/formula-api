@@ -21,6 +21,7 @@
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
+use Cake\Controller\Controller;
 use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
 
@@ -68,6 +69,7 @@ return function (RouteBuilder $routes): void {
     });
 
     $routes->prefix('Api', function (RouteBuilder $routes) {
+        $routes->post('/login',['controller'=>'Users','action'=>'login']);
         $routes->fallbacks(DashedRoute::class);
     });
 

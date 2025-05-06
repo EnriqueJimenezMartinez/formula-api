@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query\SelectQuery;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -12,7 +11,6 @@ use Cake\Validation\Validator;
  * News Model
  *
  * @property \App\Model\Table\TagsTable&\Cake\ORM\Association\BelongsToMany $Tags
- *
  * @method \App\Model\Entity\News newEmptyEntity()
  * @method \App\Model\Entity\News newEntity(array $data, array $options = [])
  * @method array<\App\Model\Entity\News> newEntities(array $data, array $options = [])
@@ -26,7 +24,6 @@ use Cake\Validation\Validator;
  * @method iterable<\App\Model\Entity\News>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\News> saveManyOrFail(iterable $entities, array $options = [])
  * @method iterable<\App\Model\Entity\News>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\News>|false deleteMany(iterable $entities, array $options = [])
  * @method iterable<\App\Model\Entity\News>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\News> deleteManyOrFail(iterable $entities, array $options = [])
- *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
 class NewsTable extends Table

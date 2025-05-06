@@ -14,10 +14,11 @@ declare(strict_types=1);
  * @since     0.2.9
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace App\Controller;
+namespace App\Controller\Api;
 
-use Cake\Controller\Controller;
+use App\Controller\AppController as BaseController;
 use Cake\Event\EventInterface;
+use Cake\View\JsonView;
 
 /**
  * Application Controller
@@ -27,7 +28,7 @@ use Cake\Event\EventInterface;
  *
  * @link https://book.cakephp.org/5/en/controllers.html#the-app-controller
  */
-class AppController extends Controller
+class ApiController extends BaseController
 {
     /**
      * Initialization hook method.
@@ -56,14 +57,33 @@ class AppController extends Controller
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
-    // for all controllers in our application, make index and view
-    // actions public, skipping the authentication check
+        $this->viewBuilder()
+            ->setClassName(JsonView::class)
+            ->disableAutoLayout()
+            ->setOption('serialize', ['status', 'data', 'message']);
+            $identity = $this->getRequest()->getAttribute('identity');
+        if (!$identity) {
+            // Lanza la excepción que nuestro ApiExceptionRenderer convierte en 401 JSON
+            $this->respond(
+                null,                // sin data
+                'error',             // status
+                'Credenciales inválidas', // mensaje
+                401,                  // código HTTP
+            );
 
-
-        $prefix = $this->request->getAttribute('params')['prefix'] ?? null;
-        if (strtolower((string)$prefix) !== 'api') {
-            // Solo en Admin / Web: index y view públicas
-            $this->Authentication->addUnauthenticatedActions([]);
+            return;
         }
+    }
+
+    protected function respond(
+        $data = null,
+        string $status = 'success',
+        string $message = '',
+        int $code = 200,
+    ): void {
+        $this->response = $this->response
+            ->withType('application/json')
+            ->withStatus($code);
+        $this->set(compact('status', 'data', 'message'));
     }
 }
