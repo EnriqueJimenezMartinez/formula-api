@@ -8,27 +8,27 @@
 <div class="row">
     <aside class="column">
         <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
+            <h4 class="heading"><?= __('_ACCIONES') ?></h4>
             <?= $this->Form->postLink(
-                __('Delete'),
+                __('_BORRAR'),
                 ['action' => 'delete', $tag->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $tag->id), 'class' => 'side-nav-item']
+                ['confirm' => __('_CONFIRMACION_BORRAR', $tag->id), 'class' => 'side-nav-item']
             ) ?>
-            <?= $this->Html->link(__('List Tags'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
+            <?= $this->Html->link(__('_LISTA_TAGS'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
         </div>
     </aside>
     <div class="column column-80">
         <div class="tags form content">
             <?= $this->Form->create($tag) ?>
             <fieldset>
-                <legend><?= __('Edit Tag') ?></legend>
+                <legend><?= __('_EDITAR_TAGS') ?></legend>
                 <?php
-                    echo $this->Form->control('name');
-                    echo $this->Form->control('description');
-                    echo $this->Form->control('news._ids', ['options' => $news]);
+                    echo $this->Form->control('name', ['label'=>__('_NOMBRE')]);
+                    echo $this->Form->control('description', ['label' =>__('_DESCRIPCION')]);
+                    echo $this->Form->control('news._ids', ['options' => $news, 'label' =>__('_NOTICIAS_RELACIONADAS')]);
                 ?>
             </fieldset>
-            <?= $this->Form->button(__('Submit')) ?>
+            <?= $this->Form->button(__('_CREAR')) ?>
             <?= $this->Form->end() ?>
         </div>
     </div>

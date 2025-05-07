@@ -4,14 +4,23 @@ msgstr "Acciones"
 msgid "_ANADIR_TAG"
 msgstr "Añadir tag"
 
+msgid "_BORRAR"
+msgstr "Borrar"
+
 msgid "_BLOG"
 msgstr "Blog Gestión"
+
+msgid "_CONFIRMACION_BORRAR"
+msgstr "¿Estás seguro que quieres borrar el elemento {0}?"
 
 msgid "_CREAR"
 msgstr "Crear"
 
 msgid "_DESCRIPCION"
 msgstr "Descripción"
+
+msgid "_EDITAR_TAGS"
+msgstr "Editar tags"
 
 msgid "_LISTA_TAGS"
 msgstr "Lista tags"
