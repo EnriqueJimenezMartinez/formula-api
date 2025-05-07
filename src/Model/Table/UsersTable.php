@@ -58,9 +58,9 @@ class UsersTable extends Table
     {
         $validator
             ->scalar('name')
-            ->maxLength('name', 50)
+            ->maxLength('name', 50, __('_NOMBRE_MAX_50_CARACTERES'))
             ->requirePresence('name', 'create')
-            ->notEmptyString('name');
+            ->notEmptyString('name', __('_NOMBRE_NECESARIO'));
 
         $validator
             ->scalar('surname')

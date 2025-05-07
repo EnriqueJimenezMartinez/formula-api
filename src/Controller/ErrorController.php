@@ -32,7 +32,6 @@ class ErrorController extends AppController
      */
     public function initialize(): void
     {
-        // Only add parent::initialize() if you are confident your appcontroller is safe.
     }
 
     /**

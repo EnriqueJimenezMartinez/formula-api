@@ -37,7 +37,7 @@ class UsersController extends ApiController
 
     public function login(): void
     {
-        // Comprobamos credenciales usando el JwtAuthenticator (o PasswordIdentifier + JwtAuthenticator)
+        // Comprobamos credenciales usando el JwtAuthenticator
         $data = $this->request->getData();
         if (empty($data['email']) || empty($data['password'])) {
             $this->respond(null, 'error', 'Email y password son requeridos', 400);
@@ -94,11 +94,19 @@ class UsersController extends ApiController
         $this->viewBuilder()->setOption('serialize', 'user');
     }
 
+    /**
+     * Método que se ejecuta antes de cada acción del controlador.
+     *
+     * - Llama al método beforeFilter del controlador padre para conservar el comportamiento base.
+     * - Indica al componente Authentication que la acción 'login' no requiere autenticación.
+     *   Esto es importante para evitar que CakePHP bloquee el acceso al login por no tener token JWT.
+     *
+     * Este método evita un bucle infinito de autenticación: sin esto, al intentar acceder al login
+     * sin estar autenticado, CakePHP lo redirigiría nuevamente a autenticarse, lo cual es un error.
+     */
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
-        // Configure the login action to not require authentication, preventing
-        // the infinite redirect loop issue
         $this->Authentication->addUnauthenticatedActions(['login']);
     }
 }

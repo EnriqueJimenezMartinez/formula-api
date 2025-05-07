@@ -135,18 +135,37 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
     {
     }
 
+    /**
+     * Configura y devuelve el servicio de autenticación para la aplicación.
+     *
+     * Este método se llama automáticamente por el plugin Authentication para definir
+     * qué métodos de autenticación e identificación se usan en función del tipo de solicitud.
+     *
+     * Se distingue entre solicitudes API (prefijo "Api") y solicitudes del panel de administración (prefijo "Admin").
+     *
+     * Para API:
+     * - Usa autenticación JWT en cabecera "Authorization".
+     * - No permite redirecciones.
+     * - Lanza error 401 si no hay token o es inválido.
+     *
+     * Para Admin (panel):
+     * - Usa autenticación de sesión + formulario.
+     * - Permite redirigir a /admin/users/login si no hay sesión activa.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @return \Authentication\AuthenticationServiceInterface
+     */
     public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
     {
-
         // Load the authenticators, you want session first
         $prefix = $request->getAttribute('params')['prefix'] ?? null;
         if ($prefix === 'Api') {
             $authenticationService = new AuthenticationService([
                 'unauthenticatedRedirect' => null,
-                'queryParam'              => null,
-                'unauthenticatedHandler'  => [
+                'queryParam' => null,
+                'unauthenticatedHandler' => [
                     'className' => 'Authentication.HttpUnauthorizedHandler',
-                    'config'    => [
+                    'config' => [
                         'wwwAuthenticate' => 'Bearer realm="api"',
                     ],
                 ],
@@ -155,10 +174,10 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             $authenticationService->loadIdentifier('Authentication.JwtSubject');
             $authenticationService->loadAuthenticator('Authentication.Jwt', [
                 // Tu secret salt en config/app.php > Security.salt
-                'secretKey'    => Configure::read('JWT_SECRET'),
-                'header'       => 'Authorization',
-                'tokenPrefix'  => 'Bearer',
-                'algorithm'    => 'HS256',
+                'secretKey' => Configure::read('JWT_SECRET'),
+                'header' => 'Authorization',
+                'tokenPrefix' => 'Bearer',
+                'algorithm' => 'HS256',
                 // opcional: permitir token en query (?token=…)
                 //'queryParam'   => 'token',
             ]);
@@ -168,13 +187,13 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             ];
             $authenticationService->loadIdentifier('Authentication.Password', compact('fields'));
             $authenticationService->loadAuthenticator('Authentication.Form', [
-                'fields'   => $fields,
+                'fields' => $fields,
                 'loginUrl' => '/api/users/login',
             ]);
         } else {
             $authenticationService = new AuthenticationService([
                 'unauthenticatedRedirect' => Router::url([
-                    'controller' =>  'Users',
+                    'controller' => 'Users',
                     'action' => 'login',
                     'prefix' => 'Admin',
                 ]),
@@ -196,7 +215,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                     'password' => 'password',
                 ],
                 'loginUrl' => Router::url([
-                    'controller' =>  'Users',
+                    'controller' => 'Users',
                     'action' => 'login',
                     'prefix' => 'Admin',
                 ]),

@@ -21,7 +21,7 @@ use Cake\Event\EventInterface;
 use Cake\View\JsonView;
 
 /**
- * Application Controller
+ * Api Controller
  *
  * Add your application-wide methods in the class below, your controllers
  * will inherit them.
@@ -54,6 +54,11 @@ class ApiController extends BaseController
         $this->loadComponent('Authentication.Authentication');
     }
 
+    /**
+     * Configura la vista para que devuelva respuestas en formato JSON
+     * Verfica si el usuario está autenticado con ela tributo identity del request
+     * Si no hay encuentra la identidad muestra el error 401
+     */
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
@@ -65,18 +70,31 @@ class ApiController extends BaseController
         if (!$identity) {
             // Lanza la excepción que nuestro ApiExceptionRenderer convierte en 401 JSON
             $this->respond(
-                null,                // sin data
-                'error',             // status
+                null, // sin data
+                'error', // status
                 'Credenciales inválidas', // mensaje
-                401,                  // código HTTP
+                401, // código HTTP
             );
 
             return;
         }
     }
 
+    /**
+     * Método auxiliar para generar respuestas JSON unificadas.
+     *
+     * Este método:
+     * - Define el tipo de contenido como 'application/json'.
+     * - Establece el código de estado HTTP de la respuesta (200, 401, 400, etc.).
+     * - Establece las variables 'status', 'data' y 'message' que serán serializadas automáticamente en JSON.
+     *
+     * @param mixed $data Datos que se incluirán en la respuesta (puede ser array, objeto o null).
+     * @param string $status Estado de la respuesta ('success', 'error', etc.).
+     * @param string $message Mensaje explicativo opcional.
+     * @param int $code Código de estado HTTP (por defecto 200).
+     */
     protected function respond(
-        $data = null,
+        mixed $data = null,
         string $status = 'success',
         string $message = '',
         int $code = 200,

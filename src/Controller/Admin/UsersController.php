@@ -101,6 +101,17 @@ class UsersController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
+    /**
+     * Método que se ejecuta antes de cada acción del controlador.
+     *
+     * - Llama al método beforeFilter del controlador padre para conservar el comportamiento base.
+     * - Especifica qué acciones pueden ejecutarse sin necesidad de autenticación (sin token JWT o sesión).
+     * - En este caso, se permite el acceso público a 'login' y 'add', útil para permitir:
+     *   - Que usuarios se autentiquen (login).
+     *   - Que nuevos usuarios se registren (add).
+     *
+     * Esto previene errores como bucles de redirección o respuestas 401 cuando el cliente aún no está autenticado.
+     */
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
@@ -109,6 +120,15 @@ class UsersController extends AppController
         $this->Authentication->addUnauthenticatedActions(['login', 'add']);
     }
 
+    /**
+     * Acción de login para usuarios del panel Admin.
+     *
+     * - Permite métodos GET y POST.
+     * - Si ya está autenticado (login exitoso), redirige al destino deseado o por defecto a /articles.
+     * - Si el usuario envía el formulario y falla la autenticación, muestra un mensaje de error.
+     *
+     * @return \Cake\Http\Response|null Redirección en caso de éxito o null para seguir mostrando el formulario
+     */
     public function login()
     {
         $this->request->allowMethod(['get', 'post']);
@@ -123,12 +143,21 @@ class UsersController extends AppController
 
             return $this->redirect($redirect);
         }
-        // display error if user submitted and authentication failed
         if ($this->request->is('post') && !$result->isValid()) {
             $this->Flash->error(__('Invalid username or password'));
         }
     }
 
+    /**
+     * Acción de logout para usuarios autenticados por sesión.
+     *
+     * - Verifica si el usuario está autenticado.
+     * - Si lo está, cierra la sesión y redirige a la pantalla de login.
+     *
+     * Esto solo aplica en interfaces web con sesión (no para APIs con JWT).
+     *
+     * @return \Cake\Http\Response|null Redirección a login o null si el usuario no estaba autenticado
+     */
     public function logout()
     {
         $result = $this->Authentication->getResult();
