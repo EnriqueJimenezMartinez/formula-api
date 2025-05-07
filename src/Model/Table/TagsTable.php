@@ -62,7 +62,7 @@ class TagsTable extends Table
             ->scalar('name')
             ->maxLength('name', 50)
             ->requirePresence('name', 'create')
-            ->notEmptyString('name');
+            ->notEmptyString('name',  __('_NOMBRE_NO_VACIO'));
 
         $validator
             ->scalar('description')

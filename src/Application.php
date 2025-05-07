@@ -196,6 +196,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                     'controller' => 'Users',
                     'action' => 'login',
                     'prefix' => 'Admin',
+                    'plugin' => false,
                 ]),
                 'queryParam' => 'redirect',
             ]);
@@ -218,6 +219,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                     'controller' => 'Users',
                     'action' => 'login',
                     'prefix' => 'Admin',
+                    'plugin' => false,
                 ]),
             ]);
         }

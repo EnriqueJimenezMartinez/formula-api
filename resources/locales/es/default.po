@@ -1,0 +1,34 @@
+msgid "_ACCIONES"
+msgstr "Acciones"
+
+msgid "_ANADIR_TAG"
+msgstr "Añadir tag"
+
+msgid "_BLOG"
+msgstr "Blog Gestión"
+
+msgid "_CREAR"
+msgstr "Crear"
+
+msgid "_DESCRIPCION"
+msgstr "Descripción"
+
+msgid "_LISTA_TAGS"
+msgstr "Lista tags"
+
+msgid "_NOMBRE"
+msgstr "Nombre"
+
+msgid "_NOTICIAS"
+msgstr "Noticias"
+
+msgid "_NOTICIAS_RELACIONADAS"
+msgstr "Noticias relacionadas"
+
+msgid "_TAGS"
+msgstr "Tags"
+
+msgid "_USUARIOS"
+msgstr "Usuarios"
+
+
