@@ -69,7 +69,22 @@ return function (RouteBuilder $routes): void {
     });
 
     $routes->prefix('Api', function (RouteBuilder $routes) {
-        $routes->post('/login',['controller'=>'Users','action'=>'login']);
+        $routes->post('/login',['controller'=>'Users', 'action'=>'login']);
+        $routes->post(
+            '/news/last-date/:date',
+            [
+                'controller' => 'News',
+                'action' => 'lastDate'
+            ]
+        )
+        ->setPass(['date']);
+
+        $routes->connect('/news/:slug', [
+            'controller' => 'News',
+            'action' => 'view',
+        ])
+        ->setPass(['slug']);
+
         $routes->fallbacks(DashedRoute::class);
     });
 

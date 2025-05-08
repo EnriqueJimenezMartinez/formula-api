@@ -73,7 +73,11 @@ class UsersController extends ApiController
 
         // Devolvemos respuesta JSON
         $this->respond(
-            ['token' => $token, 'expires' => date(DATE_ATOM, $exp)],
+            [
+                'token' => $token,
+                'expires' => date(DATE_ATOM, $exp),
+                'user' => $user
+            ],
             'success',   // status
             '',          // mensaje
             200,          // código HTTP

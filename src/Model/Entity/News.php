@@ -41,5 +41,6 @@ class News extends Entity
         'created' => true,
         'modified' => true,
         'tags' => true,
+        'image_file' => true,
     ];
 }

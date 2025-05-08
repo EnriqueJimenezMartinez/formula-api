@@ -31,6 +31,7 @@
                     echo $this->Form->control('user_id', ['options' => $users]);
                     echo $this->Form->control('is_active');
                     echo $this->Form->control('tags._ids', ['options' => $tags]);
+                    echo $this->Form->control('image_file', ['type' => 'file', 'label' => 'Imagen (opcional)']);
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>

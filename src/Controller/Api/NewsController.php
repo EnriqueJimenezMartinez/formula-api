@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller\Api;
 
+use DateTime;
+
 /**
  * News Controller
  *
@@ -41,7 +43,22 @@ class NewsController extends ApiController
 
         $news = $this->News->find('all', where: ['slug IS' => $slug], contain: ['Users', 'Tags'])
         ->first();
-        $this->set(compact('news'));
-        $this->viewBuilder()->setOption('serialize', 'news');
+
+        $this->respond($news);
+    }
+
+    public function lastDate(?string $date){
+        if(!$date){
+            $this->respond(null, 'error', 'Fecha vacía', 401);
+            return;
+        }
+        $date = new DateTime($date);
+        $lastNews = $this->News->find('all', fields: ['created'])
+        ->orderBy(['created' => 'ASC'])
+        ->first();
+
+        $respuesta=[$lastNews,$date];
+        $this->respond($respuesta);
+
     }
 }

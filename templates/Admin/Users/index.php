@@ -6,6 +6,8 @@
 ?>
 <div class="users index content">
     <?= $this->Html->link(__('New User'), ['action' => 'add'], ['class' => 'button float-right']) ?>
+    <?= $this->Html->link(__('Logout'), ['action' => 'logout'], ['class' => 'button float-left']) ?>
+
     <h3><?= __('Users') ?></h3>
     <div class="table-responsive">
         <table>
