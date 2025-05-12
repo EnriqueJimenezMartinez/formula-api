@@ -1,24 +1,25 @@
 <?php
 /**
- * Routes configuration.
+ * Configuración de las rutas.
  *
- * In this file, you set up routes to your controllers and their actions.
- * Routes are very important mechanism that allows you to freely connect
- * different URLs to chosen controllers and their actions (functions).
+ * En este archivo, configuras las rutas hacia tus controladores y sus acciones.
+ * Las rutas son un mecanismo muy importante que permite conectar
+ * diferentes URLs a los controladores elegidos y sus acciones (funciones).
  *
- * It's loaded within the context of `Application::routes()` method which
- * receives a `RouteBuilder` instance `$routes` as method argument.
+ * Se carga dentro del contexto del método `Application::routes()`
+ * que recibe una instancia de `RouteBuilder` `$routes` como argumento del método.
  *
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
+ * CakePHP(tm): Framework de Desarrollo Rápido (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
+ * Licenciado bajo la Licencia MIT
+ * Para obtener información completa de los derechos de autor y licencia,
+ * consulta el archivo LICENSE.txt
+ * Las redistribuciones de archivos deben retener el aviso de derechos de autor anterior.
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link          https://cakephp.org CakePHP(tm) Project
- * @license       https://opensource.org/licenses/mit-license.php MIT License
+ * @link          https://cakephp.org Proyecto CakePHP(tm)
+ * @license       https://opensource.org/licenses/mit-license.php Licencia MIT
  */
 
 use Cake\Controller\Controller;
@@ -26,44 +27,43 @@ use Cake\Routing\Route\DashedRoute;
 use Cake\Routing\RouteBuilder;
 
 /*
- * This file is loaded in the context of the `Application` class.
- * So you can use `$this` to reference the application class instance
- * if required.
+ * Este archivo se carga en el contexto de la clase `Application`.
+ * Por lo tanto, puedes usar `$this` para hacer referencia a la instancia de la aplicación
+ * si es necesario.
  */
 return function (RouteBuilder $routes): void {
     /*
-     * The default class to use for all routes
+     * La clase predeterminada para usar en todas las rutas
      *
-     * The following route classes are supplied with CakePHP and are appropriate
-     * to set as the default:
+     * Las siguientes clases de rutas son proporcionadas con CakePHP y son apropiadas
+     * para establecer como la predeterminada:
      *
      * - Route
      * - InflectedRoute
      * - DashedRoute
      *
-     * If no call is made to `Router::defaultRouteClass()`, the class used is
+     * Si no se llama a `Router::defaultRouteClass()`, la clase que se usa es
      * `Route` (`Cake\Routing\Route\Route`)
      *
-     * Note that `Route` does not do any inflections on URLs which will result in
-     * inconsistently cased URLs when used with `{plugin}`, `{controller}` and
-     * `{action}` markers.
+     * Ten en cuenta que `Route` no realiza ninguna inflexión en las URLs, lo que resultará en
+     * URLs de formato inconsistente cuando se usen los marcadores `{plugin}`, `{controller}` y
+     * `{action}`.
      */
     $routes->setRouteClass(DashedRoute::class);
 
     $routes->scope('/', function (RouteBuilder $builder): void {
         /*
-         * Here, we are connecting '/' (base path) to a controller called 'Pages',
-         * its action called 'display', and we pass a param to select the view file
-         * to use (in this case, templates/Pages/home.php)...
+         * Aquí, estamos conectando '/' (camino base) a un controlador llamado 'Pages',
+         * su acción llamada 'display', y pasamos un parámetro para seleccionar el archivo de vista
+         * a usar (en este caso, templates/Pages/home.php)...
          */
         $builder->connect('/', ['controller' => 'Users', 'action' => 'index', 'prefix' => 'Admin']);
-
     });
 
     $routes->prefix('Admin', function (RouteBuilder $routes) {
-        // All routes here will be prefixed with `/admin`, and
-        // have the `'prefix' => 'Admin'` route element added that
-        // will be required when generating URLs for these routes
+        // Todas las rutas aquí estarán prefijadas con `/admin`, y
+        // tendrán el elemento `'prefix' => 'Admin'` que será necesario
+        // cuando se generen URLs para estas rutas
         $routes->connect('/', ['controller' => 'Users', 'action' => 'index']);
         $routes->fallbacks(DashedRoute::class);
     });
@@ -89,17 +89,17 @@ return function (RouteBuilder $routes): void {
     });
 
     /*
-     * If you need a different set of middleware or none at all,
-     * open new scope and define routes there.
+     * Si necesitas un conjunto diferente de middleware o ninguno en absoluto,
+     * abre un nuevo scope y define las rutas allí.
      *
      * ```
      * $routes->scope('/api', function (RouteBuilder $builder): void {
-     *     // No $builder->applyMiddleware() here.
+     *     // Aquí no se usa $builder->applyMiddleware().
      *
-     *     // Parse specified extensions from URLs
+     *     // Puedes analizar extensiones especificadas desde las URLs
      *     // $builder->setExtensions(['json', 'xml']);
      *
-     *     // Connect API actions here.
+     *     // Conecta las acciones de la API aquí.
      * });
      * ```
      */

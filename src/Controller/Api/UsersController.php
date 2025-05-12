@@ -16,37 +16,50 @@ use Firebase\JWT\JWT;
 class UsersController extends ApiController
 {
     /**
-     * Index method
+     * Initialize method
      *
-     * @return \Cake\Http\Response|null|void Renders view
+     * @return void
      */
     public function initialize(): void
     {
         parent::initialize();
     }
 
+    /**
+     * Index method
+     *
+     * @return \Cake\Http\Response|null|void
+     */
     public function index()
     {
         $query = $this->Users->find();
         $users = $this->paginate($query);
 
         $this->set(compact('users'));
-
         $this->viewBuilder()->setOption('serialize', 'users');
     }
 
+    /**
+     * Login method
+     *
+     * Handles user authentication and returns JWT if credentials are valid.
+     *
+     * @return void
+     */
     public function login(): void
     {
-        // Comprobamos credenciales usando el JwtAuthenticator
         $data = $this->request->getData();
+
         if (empty($data['email']) || empty($data['password'])) {
             $this->respond(null, 'error', 'Email y password son requeridos', 400);
 
             return;
         }
+
         $user = $this->Users->find()
             ->where(['email' => $data['email']])
             ->first();
+
         $hasher = new DefaultPasswordHasher();
         if (!$user || !$hasher->check($data['password'], $user->password)) {
             $this->respond(null, 'error', 'Credenciales inválidas', 401);
@@ -54,61 +67,55 @@ class UsersController extends ApiController
             return;
         }
 
-        // Construimos el payload del JWT
-        $now   = time();
-        $exp   = $now + 86400; // expira en 1 día
+        $now = time();
+        $exp = $now + 86400; // 1 día
+
         $payload = [
-            'sub' => $user->id,                     // subject: ID de usuario
-            'iat' => $now,                          // issued at
-            'exp' => $exp,                          // expiration
-            'iss' => Configure::read('App.fullBaseUrl'), // issuer (opcional)
+            'sub' => $user->id,
+            'iat' => $now,
+            'exp' => $exp,
+            'iss' => Configure::read('App.fullBaseUrl'),
         ];
 
-        // Generamos el token con nuestra clave secreta
         $token = JWT::encode(
             $payload,
             Configure::read('JWT_SECRET'),
             'HS256',
         );
 
-        // Devolvemos respuesta JSON
         $this->respond(
             [
                 'token' => $token,
                 'expires' => date(DATE_ATOM, $exp),
-                'user' => $user
+                'user' => $user,
             ],
-            'success',   // status
-            '',          // mensaje
-            200,          // código HTTP
+            'success',
+            '',
+            200,
         );
     }
 
     /**
      * View method
      *
-     * @param string|null $id User id.
-     * @return \Cake\Http\Response|null|void Renders view
+     * @param string|null $id User ID.
+     * @return \Cake\Http\Response|null|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view(?string $id = null)
     {
-        $user = $this->Users->get($id, contain: ['News']);
+        $user = $this->Users->get($id, ['contain' => ['News']]);
         $this->set(compact('user'));
         $this->viewBuilder()->setOption('serialize', 'user');
     }
 
     /**
-     * Método que se ejecuta antes de cada acción del controlador.
+     * Método ejecutado antes de cada acción del controlador.
      *
-     * - Llama al método beforeFilter del controlador padre para conservar el comportamiento base.
-     * - Indica al componente Authentication que la acción 'login' no requiere autenticación.
-     *   Esto es importante para evitar que CakePHP bloquee el acceso al login por no tener token JWT.
-     *
-     * Este método evita un bucle infinito de autenticación: sin esto, al intentar acceder al login
-     * sin estar autenticado, CakePHP lo redirigiría nuevamente a autenticarse, lo cual es un error.
+     * @param \Cake\Event\EventInterface $event Evento de filtro previo.
+     * @return void
      */
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): void
     {
         parent::beforeFilter($event);
         $this->Authentication->addUnauthenticatedActions(['login']);

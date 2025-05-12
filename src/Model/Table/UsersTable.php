@@ -8,59 +8,71 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * Users Model
+ * Modelo de la tabla Users
  *
- * @method \App\Model\Entity\User newEmptyEntity()
- * @method \App\Model\Entity\User newEntity(array $data, array $options = [])
- * @method array<\App\Model\Entity\User> newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\User get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
- * @method \App\Model\Entity\User findOrCreate($search, ?callable $callback = null, array $options = [])
- * @method \App\Model\Entity\User patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method array<\App\Model\Entity\User> patchEntities(iterable $entities, array $data, array $options = [])
- * @method \App\Model\Entity\User|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method \App\Model\Entity\User saveOrFail(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method iterable<\App\Model\Entity\User>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\User>|false saveMany(iterable $entities, array $options = [])
- * @method iterable<\App\Model\Entity\User>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\User> saveManyOrFail(iterable $entities, array $options = [])
- * @method iterable<\App\Model\Entity\User>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\User>|false deleteMany(iterable $entities, array $options = [])
- * @method iterable<\App\Model\Entity\User>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\User> deleteManyOrFail(iterable $entities, array $options = [])
- * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ * Métodos para trabajar con entidades de usuario.
+ *
+ * @method \App\Model\Entity\User newEmptyEntity() Crear una nueva entidad vacía.
+ * @method \App\Model\Entity\User newEntity(array $data, array $options = []) Crear una nueva entidad con datos.
+ * @method array<\App\Model\Entity\User> newEntities(array $data, array $options = []) Crear múltiples entidades con datos.
+ * @method \App\Model\Entity\User get(mixed $primaryKey, ...) Obtener una entidad por clave primaria.
+ * @method \App\Model\Entity\User findOrCreate($search, ?callable $callback = null, array $options = []) Buscar o crear una entidad.
+ * @method \App\Model\Entity\User patchEntity(...) Actualizar una entidad existente con nuevos datos.
+ * @method array<\App\Model\Entity\User> patchEntities(...) Actualizar múltiples entidades.
+ * @method \App\Model\Entity\User|false save(...) Guardar una entidad, devuelve false si falla.
+ * @method \App\Model\Entity\User saveOrFail(...) Guardar o lanzar una excepción si falla.
+ * @method iterable<\App\Model\Entity\User>|... saveMany(...) Guardar múltiples entidades.
+ * @method iterable<\App\Model\Entity\User>|... saveManyOrFail(...) Guardar múltiples entidades o lanzar excepción si falla.
+ * @method iterable<\App\Model\Entity\User>|... deleteMany(...) Eliminar múltiples entidades.
+ * @method iterable<\App\Model\Entity\User>|... deleteManyOrFail(...) Eliminar múltiples entidades o lanzar excepción si falla.
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior Comportamiento para gestionar automáticamente campos de tiempo (created/modified).
  */
 class UsersTable extends Table
 {
     /**
-     * Initialize method
+     * Método de inicialización.
      *
-     * @param array<string, mixed> $config The configuration for the Table.
+     * Configura la tabla, el campo de visualización, la clave primaria
+     * y relaciones con otras tablas.
+     *
+     * @param array<string, mixed> $config Configuración para la tabla.
      * @return void
      */
     public function initialize(array $config): void
     {
         parent::initialize($config);
 
+        // Nombre de la tabla en la base de datos
         $this->setTable('users');
+        // Campo que se mostrará por defecto al representar una entidad
         $this->setDisplayField('name');
+        // Clave primaria de la tabla
         $this->setPrimaryKey('id');
 
+        // Añade el comportamiento Timestamp (campos created y modified)
         $this->addBehavior('Timestamp');
 
+        // Relación: un usuario tiene muchas noticias
         $this->hasMany('News', [
             'foreignKey' => 'user_id',
         ]);
     }
 
     /**
-     * Default validation rules.
+     * Reglas de validación por defecto.
      *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
+     * Define qué campos son obligatorios, su formato y otras restricciones.
+     *
+     * @param \Cake\Validation\Validator $validator Instancia del validador.
+     * @return \Cake\Validation\Validator Validador configurado.
      */
     public function validationDefault(Validator $validator): Validator
     {
         $validator
             ->scalar('name')
-            ->maxLength('name', 50, __('_NOMBRE_MAX_50_CARACTERES'))
-            ->requirePresence('name', 'create')
-            ->notEmptyString('name', __('_NOMBRE_NECESARIO'));
+            ->maxLength('name', 50, __('_NOMBRE_MAX_50_CARACTERES')) // Longitud máxima personalizada
+            ->requirePresence('name', 'create') // Requiere en creación
+            ->notEmptyString('name', __('_NOMBRE_NECESARIO')); // No puede estar vacío
 
         $validator
             ->scalar('surname')
@@ -73,13 +85,19 @@ class UsersTable extends Table
             ->maxLength('nickname', 50)
             ->requirePresence('nickname', 'create')
             ->notEmptyString('nickname')
-            ->add('nickname', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+            ->add('nickname', 'unique', [
+                'rule' => 'validateUnique',
+                'provider' => 'table',
+            ]); // Debe ser único
 
         $validator
-            ->email('email')
+            ->email('email') // Formato de email
             ->requirePresence('email', 'create')
             ->notEmptyString('email')
-            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+            ->add('email', 'unique', [
+                'rule' => 'validateUnique',
+                'provider' => 'table',
+            ]);
 
         $validator
             ->scalar('password')
@@ -96,16 +114,17 @@ class UsersTable extends Table
     }
 
     /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
+     * Reglas de integridad para la aplicación.
      *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
+     * Se asegura de que ciertos campos sean únicos a nivel de base de datos.
+     *
+     * @param \Cake\ORM\RulesChecker $rules Objeto rules a modificar.
+     * @return \Cake\ORM\RulesChecker Objeto modificado con reglas añadidas.
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->isUnique(['nickname']), ['errorField' => 'nickname']);
-        $rules->add($rules->isUnique(['email']), ['errorField' => 'email']);
+        $rules->add($rules->isUnique(['nickname']), ['errorField' => 'nickname']); // Nick único
+        $rules->add($rules->isUnique(['email']), ['errorField' => 'email']); // Email único
 
         return $rules;
     }

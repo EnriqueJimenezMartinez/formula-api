@@ -1,94 +1,95 @@
 <?php
 /**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
+ * CakePHP(tm): Framework de Desarrollo Rápido (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
- * Licensed under The MIT License
- * Redistributions of files must retain the above copyright notice.
+ * Licenciado bajo la Licencia MIT
+ * Las redistribuciones de archivos deben retener el aviso de derechos de autor anterior.
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link          https://cakephp.org CakePHP(tm) Project
+ * @link          https://cakephp.org Proyecto CakePHP(tm)
  * @since         3.0.0
- * @license       MIT License (https://opensource.org/licenses/mit-license.php)
+ * @license       Licencia MIT (https://opensource.org/licenses/mit-license.php)
  */
 
 /*
- * Use the DS to separate the directories in other defines
+ * Usa DS para separar los directorios en otras definiciones
  */
 if (!defined('DS')) {
     define('DS', DIRECTORY_SEPARATOR);
 }
 
 /*
- * These defines should only be edited if you have cake installed in
- * a directory layout other than the way it is distributed.
- * When using custom settings be sure to use the DS and do not add a trailing DS.
+ * Estas definiciones solo deben editarse si tienes Cake instalado en
+ * una estructura de directorios diferente a la que se distribuye.
+ * Cuando uses configuraciones personalizadas, asegúrate de usar DS y no añadir un DS final.
  */
 
 /*
- * The full path to the directory which holds "src", WITHOUT a trailing DS.
+ * La ruta completa al directorio que contiene "src", SIN un DS final.
  */
 define('ROOT', dirname(__DIR__));
 
 /*
- * The actual directory name for the application directory. Normally
- * named 'src'.
+ * El nombre real del directorio para el directorio de la aplicación. Normalmente
+ * se llama 'src'.
  */
 define('APP_DIR', 'src');
 
 /*
- * Path to the application's directory.
+ * Ruta al directorio de la aplicación.
  */
 define('APP', ROOT . DS . APP_DIR . DS);
 
 /*
- * Path to the config directory.
+ * Ruta al directorio de configuración.
  */
 define('CONFIG', ROOT . DS . 'config' . DS);
 
 /*
- * File path to the webroot directory.
+ * Ruta del archivo al directorio webroot.
  *
- * To derive your webroot from your webserver change this to:
+ * Para derivar tu webroot desde tu servidor web, cambia esto a:
  *
  * `define('WWW_ROOT', rtrim($_SERVER['DOCUMENT_ROOT'], DS) . DS);`
  */
 define('WWW_ROOT', ROOT . DS . 'webroot' . DS);
 
 /*
- * Path to the tests directory.
+ * Ruta al directorio de pruebas.
  */
 define('TESTS', ROOT . DS . 'tests' . DS);
 
 /*
- * Path to the temporary files directory.
+ * Ruta al directorio de archivos temporales.
  */
 define('TMP', ROOT . DS . 'tmp' . DS);
 
 /*
- * Path to the logs directory.
+ * Ruta al directorio de registros.
  */
 define('LOGS', ROOT . DS . 'logs' . DS);
 
 /*
- * Path to the cache files directory. It can be shared between hosts in a multi-server setup.
+ * Ruta al directorio de archivos en caché. Puede ser compartido entre hosts en una configuración de servidor múltiple.
  */
 define('CACHE', TMP . 'cache' . DS);
 
 /*
- * Path to the resources directory.
+ * Ruta al directorio de recursos.
  */
 define('RESOURCES', ROOT . DS . 'resources' . DS);
 
 /*
- * The absolute path to the "cake" directory, WITHOUT a trailing DS.
+ * La ruta absoluta al directorio "cake", SIN un DS final.
  *
- * CakePHP should always be installed with composer, so look there.
+ * CakePHP siempre debe instalarse con composer, así que busca allí.
  */
 define('CAKE_CORE_INCLUDE_PATH', ROOT . DS . 'vendor' . DS . 'cakephp' . DS . 'cakephp');
 
 /*
- * Path to the cake directory.
+ * Ruta al directorio cake.
  */
 define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
 define('CAKE', CORE_PATH . 'src' . DS);
+

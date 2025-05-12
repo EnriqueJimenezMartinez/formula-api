@@ -7,26 +7,27 @@ use Authentication\PasswordHasher\DefaultPasswordHasher;
 use Cake\ORM\Entity;
 
 /**
- * User Entity
+ * Entidad Usuario
  *
- * @property int $id
- * @property string $name
- * @property string $surname
- * @property string $nickname
- * @property string $email
- * @property string $password
- * @property bool $is_active
- * @property \Cake\I18n\DateTime $created
- * @property \Cake\I18n\DateTime $modified
+ * Representa un registro de la tabla `users`.
+ *
+ * @property int $id Identificador único del usuario.
+ * @property string $name Nombre del usuario.
+ * @property string $surname Apellido del usuario.
+ * @property string $nickname Apodo o nombre de usuario.
+ * @property string $email Correo electrónico.
+ * @property string $password Contraseña (encriptada).
+ * @property bool $is_active Indica si el usuario está activo.
+ * @property \Cake\I18n\DateTime $created Fecha de creación del usuario.
+ * @property \Cake\I18n\DateTime $modified Fecha de última modificación.
  */
 class User extends Entity
 {
     /**
-     * Fields that can be mass assigned using newEntity() or patchEntity().
+     * Campos que pueden asignarse en masa usando newEntity() o patchEntity().
      *
-     * Note that when '*' is set to true, this allows all unspecified fields to
-     * be mass assigned. For security purposes, it is advised to set '*' to false
-     * (or remove it), and explicitly make individual fields accessible as needed.
+     * Se recomienda por seguridad desactivar el acceso general ('*' => true)
+     * y especificar los campos permitidos manualmente.
      *
      * @var array<string, bool>
      */
@@ -42,13 +43,24 @@ class User extends Entity
     ];
 
     /**
-     * Fields that are excluded from JSON versions of the entity.
+     * Campos que se ocultarán al convertir la entidad a JSON.
+     *
+     * Útil para no exponer datos sensibles como contraseñas.
      *
      * @var list<string>
      */
     protected array $_hidden = [
         'password',
     ];
+
+    /**
+     * Método para encriptar automáticamente la contraseña antes de guardarla.
+     *
+     * Se utiliza al establecer el valor del campo "password".
+     *
+     * @param string $password Contraseña en texto plano.
+     * @return string|null Contraseña encriptada o null si está vacía.
+     */
     protected function _setPassword(string $password): ?string
     {
         if (strlen($password) > 0) {

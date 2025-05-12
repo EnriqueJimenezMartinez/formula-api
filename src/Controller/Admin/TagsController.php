@@ -6,16 +6,16 @@ namespace App\Controller\Admin;
 use App\Controller\AppController;
 
 /**
- * Tags Controller
+ * Controlador de Etiquetas
  *
  * @property \App\Model\Table\TagsTable $Tags
  */
 class TagsController extends AppController
 {
     /**
-     * Index method
+     * Método Index
      *
-     * @return \Cake\Http\Response|null|void Renders view
+     * @return \Cake\Http\Response|null|void Renderiza la vista
      */
     public function index()
     {
@@ -26,11 +26,11 @@ class TagsController extends AppController
     }
 
     /**
-     * View method
+     * Método View
      *
-     * @param string|null $id Tag id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @param string|null $id Id de la etiqueta.
+     * @return \Cake\Http\Response|null|void Renderiza la vista
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException Si no se encuentra el registro.
      */
     public function view(?string $id = null)
     {
@@ -39,9 +39,9 @@ class TagsController extends AppController
     }
 
     /**
-     * Add method
+     * Método Add
      *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
+     * @return \Cake\Http\Response|null|void Redirige en caso de éxito, renderiza la vista en caso contrario.
      */
     public function add()
     {
@@ -49,22 +49,22 @@ class TagsController extends AppController
         if ($this->request->is('post')) {
             $tag = $this->Tags->patchEntity($tag, $this->request->getData());
             if ($this->Tags->save($tag)) {
-                $this->Flash->success(__('The tag has been saved.'));
+                $this->Flash->success(__('La etiqueta ha sido guardada.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The tag could not be saved. Please, try again.'));
+            $this->Flash->error(__('La etiqueta no pudo ser guardada. Por favor, intente nuevamente.'));
         }
         $news = $this->Tags->News->find('list', limit: 200)->all();
         $this->set(compact('tag', 'news'));
     }
 
     /**
-     * Edit method
+     * Método Edit
      *
-     * @param string|null $id Tag id.
-     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @param string|null $id Id de la etiqueta.
+     * @return \Cake\Http\Response|null|void Redirige en caso de éxito, renderiza la vista en caso contrario.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException Si no se encuentra el registro.
      */
     public function edit(?string $id = null)
     {
@@ -72,31 +72,31 @@ class TagsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $tag = $this->Tags->patchEntity($tag, $this->request->getData());
             if ($this->Tags->save($tag)) {
-                $this->Flash->success(__('The tag has been saved.'));
+                $this->Flash->success(__('La etiqueta ha sido guardada.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The tag could not be saved. Please, try again.'));
+            $this->Flash->error(__('La etiqueta no pudo ser guardada. Por favor, intente nuevamente.'));
         }
         $news = $this->Tags->News->find('list', limit: 200)->all();
         $this->set(compact('tag', 'news'));
     }
 
     /**
-     * Delete method
+     * Método Delete
      *
-     * @param string|null $id Tag id.
-     * @return \Cake\Http\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @param string|null $id Id de la etiqueta.
+     * @return \Cake\Http\Response|null Redirige al índice.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException Si no se encuentra el registro.
      */
     public function delete(?string $id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
         $tag = $this->Tags->get($id);
         if ($this->Tags->delete($tag)) {
-            $this->Flash->success(__('The tag has been deleted.'));
+            $this->Flash->success(__('La etiqueta ha sido eliminada.'));
         } else {
-            $this->Flash->error(__('The tag could not be deleted. Please, try again.'));
+            $this->Flash->error(__('La etiqueta no pudo ser eliminada. Por favor, intente nuevamente.'));
         }
 
         return $this->redirect(['action' => 'index']);

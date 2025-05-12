@@ -8,46 +8,58 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * News Model
+ * Modelo de la tabla News (Noticias)
  *
- * @property \App\Model\Table\TagsTable&\Cake\ORM\Association\BelongsToMany $Tags
- * @method \App\Model\Entity\News newEmptyEntity()
- * @method \App\Model\Entity\News newEntity(array $data, array $options = [])
- * @method array<\App\Model\Entity\News> newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\News get(mixed $primaryKey, array|string $finder = 'all', \Psr\SimpleCache\CacheInterface|string|null $cache = null, \Closure|string|null $cacheKey = null, mixed ...$args)
- * @method \App\Model\Entity\News findOrCreate($search, ?callable $callback = null, array $options = [])
- * @method \App\Model\Entity\News patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method array<\App\Model\Entity\News> patchEntities(iterable $entities, array $data, array $options = [])
- * @method \App\Model\Entity\News|false save(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method \App\Model\Entity\News saveOrFail(\Cake\Datasource\EntityInterface $entity, array $options = [])
- * @method iterable<\App\Model\Entity\News>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\News>|false saveMany(iterable $entities, array $options = [])
- * @method iterable<\App\Model\Entity\News>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\News> saveManyOrFail(iterable $entities, array $options = [])
- * @method iterable<\App\Model\Entity\News>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\News>|false deleteMany(iterable $entities, array $options = [])
- * @method iterable<\App\Model\Entity\News>|\Cake\Datasource\ResultSetInterface<\App\Model\Entity\News> deleteManyOrFail(iterable $entities, array $options = [])
- * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ * @property \App\Model\Table\TagsTable&\Cake\ORM\Association\BelongsToMany $Tags Asociación con etiquetas (Tags)
+ *
+ * Métodos para gestionar entidades de noticias.
+ * @method \App\Model\Entity\News newEmptyEntity() Crear una nueva entidad vacía.
+ * @method \App\Model\Entity\News newEntity(array $data, array $options = []) Crear una entidad con datos.
+ * @method array<\App\Model\Entity\News> newEntities(array $data, array $options = []) Crear múltiples entidades.
+ * @method \App\Model\Entity\News get(...) Obtener una entidad por clave primaria.
+ * @method \App\Model\Entity\News findOrCreate(...) Buscar o crear una entidad.
+ * @method \App\Model\Entity\News patchEntity(...) Actualizar una entidad existente con nuevos datos.
+ * @method array<\App\Model\Entity\News> patchEntities(...) Actualizar múltiples entidades.
+ * @method \App\Model\Entity\News|false save(...) Guardar una entidad, devuelve false si falla.
+ * @method \App\Model\Entity\News saveOrFail(...) Guardar o lanzar excepción si falla.
+ * @method iterable<\App\Model\Entity\News>|... saveMany(...) Guardar múltiples entidades.
+ * @method iterable<\App\Model\Entity\News>|... saveManyOrFail(...) Guardar múltiples o lanzar excepción si falla.
+ * @method iterable<\App\Model\Entity\News>|... deleteMany(...) Eliminar múltiples entidades.
+ * @method iterable<\App\Model\Entity\News>|... deleteManyOrFail(...) Eliminar múltiples o lanzar excepción si falla.
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior Comportamiento para campos created y modified.
  */
 class NewsTable extends Table
 {
     /**
-     * Initialize method
+     * Método de inicialización.
      *
-     * @param array<string, mixed> $config The configuration for the Table.
+     * Configura la tabla, clave primaria, campo de visualización
+     * y relaciones con otras tablas.
+     *
+     * @param array<string, mixed> $config Configuración de la tabla.
      * @return void
      */
     public function initialize(array $config): void
     {
         parent::initialize($config);
 
+        // Nombre de la tabla en la base de datos
         $this->setTable('news');
+        // Campo que se mostrará por defecto al representar una entidad
         $this->setDisplayField('title');
+        // Clave primaria
         $this->setPrimaryKey('id');
 
+        // Añade el comportamiento Timestamp (created/modified)
         $this->addBehavior('Timestamp');
 
+        // Relación: cada noticia pertenece a un usuario
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
             'joinType' => 'INNER',
         ]);
+
+        // Relación muchos a muchos con etiquetas
         $this->belongsToMany('Tags', [
             'foreignKey' => 'news_id',
             'targetForeignKey' => 'tag_id',
@@ -56,19 +68,21 @@ class NewsTable extends Table
     }
 
     /**
-     * Default validation rules.
+     * Reglas de validación por defecto.
      *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
+     * Define qué campos son obligatorios, sus formatos y restricciones.
+     *
+     * @param \Cake\Validation\Validator $validator Instancia del validador.
+     * @return \Cake\Validation\Validator Validador configurado.
      */
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->scalar('title')
+            ->scalar('title') // Campo de texto
             ->maxLength('title', 255)
-            ->requirePresence('title', 'create')
-            ->notEmptyString('title')
-            ->add('title', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+            ->requirePresence('title', 'create') // Requiere en creación
+            ->notEmptyString('title') // No puede estar vacío
+            ->add('title', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']); // Debe ser único
 
         $validator
             ->scalar('slug')
@@ -78,21 +92,21 @@ class NewsTable extends Table
             ->add('slug', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
         $validator
-            ->scalar('description')
+            ->scalar('description') // Campo obligatorio
             ->requirePresence('description', 'create')
             ->notEmptyString('description');
 
         $validator
-            ->scalar('body')
+            ->scalar('body') // Cuerpo de la noticia
             ->requirePresence('body', 'create')
             ->notEmptyString('body');
 
         $validator
-            ->integer('user_id')
+            ->integer('user_id') // ID del usuario autor
             ->notEmptyString('user_id');
 
         $validator
-            ->boolean('is_active')
+            ->boolean('is_active') // Estado de publicación
             ->requirePresence('is_active', 'create')
             ->notEmptyString('is_active');
 
@@ -100,17 +114,19 @@ class NewsTable extends Table
     }
 
     /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
+     * Reglas de integridad de la aplicación.
      *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
+     * Se asegura de que los títulos y slugs sean únicos y que la noticia
+     * pertenezca a un usuario existente.
+     *
+     * @param \Cake\ORM\RulesChecker $rules Objeto Rules a modificar.
+     * @return \Cake\ORM\RulesChecker Reglas actualizadas.
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->isUnique(['title']), ['errorField' => 'title']);
-        $rules->add($rules->isUnique(['slug']), ['errorField' => 'slug']);
-        $rules->add($rules->existsIn(['user_id'], 'Users'), ['errorField' => 'user_id']);
+        $rules->add($rules->isUnique(['title']), ['errorField' => 'title']); // Título único
+        $rules->add($rules->isUnique(['slug']), ['errorField' => 'slug']); // Slug único
+        $rules->add($rules->existsIn(['user_id'], 'Users'), ['errorField' => 'user_id']); // Debe haber usuario asociado
 
         return $rules;
     }

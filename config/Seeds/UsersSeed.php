@@ -10,9 +10,7 @@ class UsersSeed extends BaseSeed
 {
     /**
      * Run Method.
-     *
-     * Write your database seeder using this method.
-     *
+
      * More information on writing seeds is available here:
      * https://book.cakephp.org/migrations/4/en/seeding.html
      *

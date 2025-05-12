@@ -7,45 +7,41 @@ use Cake\Log\Engine\FileLog;
 use Cake\Mailer\Transport\MailTransport;
 
 return [
-    /*
-     * Debug Level:
+       /*
+     * Nivel de depuración:
      *
-     * Production Mode:
-     * false: No error messages, errors, or warnings shown.
+     * Modo de producción:
+     * falso: No se muestran mensajes de error, errores ni advertencias.
      *
-     * Development Mode:
-     * true: Errors and warnings shown.
+     * Modo de desarrollo:
+     * verdadero: Se muestran errores y advertencias.
      */
     'debug' => filter_var(env('DEBUG', false), FILTER_VALIDATE_BOOLEAN),
 
     /*
-     * Configure basic information about the application.
+     * Configura la información básica de la aplicación.
      *
-     * - namespace - The namespace to find app classes under.
-     * - defaultLocale - The default locale for translation, formatting currencies and numbers, date and time.
-     * - encoding - The encoding used for HTML + database connections.
-     * - base - The base directory the app resides in. If false this
-     *   will be auto-detected.
-     * - dir - Name of app directory.
-     * - webroot - The webroot directory.
-     * - wwwRoot - The file path to webroot.
-     * - baseUrl - To configure CakePHP to *not* use mod_rewrite and to
-     *   use CakePHP pretty URLs, remove these .htaccess
-     *   files:
+     * - namespace - El espacio de nombres donde se encuentran las clases de la aplicación.
+     * - defaultLocale - El idioma predeterminado para traducciones, formato de monedas y números, fecha y hora.
+     * - encoding - La codificación utilizada para HTML y conexiones a la base de datos.
+     * - base - El directorio base en el que reside la aplicación. Si es falso, se detecta automáticamente.
+     * - dir - Nombre del directorio de la aplicación.
+     * - webroot - El directorio webroot.
+     * - wwwRoot - La ruta al archivo webroot.
+     * - baseUrl - Para configurar CakePHP para que NO use mod_rewrite y use las URLs bonitas de CakePHP, elimina estos archivos .htaccess:
      *      /.htaccess
      *      /webroot/.htaccess
-     *   And uncomment the baseUrl key below.
-     * - fullBaseUrl - A base URL to use for absolute links. When set to false (default)
-     *   CakePHP generates required value based on `HTTP_HOST` environment variable.
-     *   However, you can define it manually to optimize performance or if you
-     *   are concerned about people manipulating the `Host` header.
-     * - imageBaseUrl - Web path to the public images/ directory under webroot.
-     * - cssBaseUrl - Web path to the public css/ directory under webroot.
-     * - jsBaseUrl - Web path to the public js/ directory under webroot.
-     * - paths - Configure paths for non class-based resources. Supports the
-     *   `plugins`, `templates`, `locales` subkeys, which allow the definition of
-     *   paths for plugins, view templates and locale files respectively.
+     *   Y descomenta la clave baseUrl a continuación.
+     * - fullBaseUrl - Una URL base que se usará para enlaces absolutos. Cuando se configura como falso (por defecto),
+     *   CakePHP genera el valor requerido basado en la variable de entorno `HTTP_HOST`.
+     *   Sin embargo, puedes definirla manualmente para optimizar el rendimiento o si te preocupa que las personas manipulen el encabezado `Host`.
+     * - imageBaseUrl - Ruta web al directorio público de imágenes/ dentro de webroot.
+     * - cssBaseUrl - Ruta web al directorio público de css/ dentro de webroot.
+     * - jsBaseUrl - Ruta web al directorio público de js/ dentro de webroot.
+     * - paths - Configura rutas para recursos no basados en clases. Soporta las subclaves `plugins`, `templates`, `locales`,
+     *   que permiten la definición de rutas para plugins, plantillas de vistas y archivos de locales respectivamente.
      */
+
     'App' => [
         'namespace' => 'App',
         'encoding' => env('APP_ENCODING', 'UTF-8'),
@@ -67,24 +63,24 @@ return [
         ],
     ],
 
-    /*
-     * Security and encryption configuration
+     /*
+     * Configuración de seguridad y encriptación
      *
-     * - salt - A random string used in security hashing methods.
-     *   The salt value is also used as the encryption key.
-     *   You should treat it as extremely sensitive data.
+     * - salt - Una cadena aleatoria utilizada en los métodos de hash de seguridad.
+     *   El valor de salt también se usa como clave de encriptación.
+     *   Debes tratarlo como un dato extremadamente sensible.
      */
     'Security' => [
         'salt' => env('SECURITY_SALT'),
     ],
 
     /*
-     * Apply timestamps with the last modified time to static assets (js, css, images).
-     * Will append a querystring parameter containing the time the file was modified.
-     * This is useful for busting browser caches.
+     * Aplicar marcas de tiempo con la última hora de modificación a los recursos estáticos (js, css, imágenes).
+     * Se añadirá un parámetro de consulta que contiene el tiempo en que se modificó el archivo.
+     * Esto es útil para forzar el borrado de la caché del navegador.
      *
-     * Set to true to apply timestamps when debug is true. Set to 'force' to always
-     * enable timestamping regardless of debug value.
+     * Configura como verdadero para aplicar marcas de tiempo cuando debug sea verdadero. Configura como 'force' para habilitar siempre
+     * las marcas de tiempo independientemente del valor de debug.
      */
     'Asset' => [
         //'timestamp' => true,
@@ -92,7 +88,7 @@ return [
     ],
 
     /*
-     * Configure the cache adapters.
+     * Configura los adaptadores de caché.
      */
     'Cache' => [
         'default' => [
@@ -102,10 +98,10 @@ return [
         ],
 
         /*
-         * Configure the cache used for general framework caching.
-         * Translation cache files are stored with this configuration.
-         * Duration will be set to '+2 minutes' in bootstrap.php when debug = true
-         * If you set 'className' => 'Null' core cache will be disabled.
+         * Configura la caché utilizada para la caché general del framework.
+         * Los archivos de caché de traducción se almacenan con esta configuración.
+         * La duración se establecerá en '+2 minutos' en bootstrap.php cuando debug = true
+         * Si configuras 'className' => 'Null', se desactivará la caché central.
          */
         '_cake_translations_' => [
             'className' => FileEngine::class,
@@ -117,10 +113,9 @@ return [
         ],
 
         /*
-         * Configure the cache for model and datasource caches. This cache
-         * configuration is used to store schema descriptions, and table listings
-         * in connections.
-         * Duration will be set to '+2 minutes' in bootstrap.php when debug = true
+         * Configura la caché utilizada para la caché de modelos y fuentes de datos. Esta configuración de caché
+         * se usa para almacenar descripciones de esquema y listados de tablas en las conexiones.
+         * La duración se establecerá en '+2 minutos' en bootstrap.php cuando debug = true
          */
         '_cake_model_' => [
             'className' => FileEngine::class,
@@ -133,41 +128,37 @@ return [
     ],
 
     /*
-     * Configure the Error and Exception handlers used by your application.
+     * Configura los controladores de errores y excepciones utilizados por tu aplicación.
      *
-     * By default errors are displayed using Debugger, when debug is true and logged
-     * by Cake\Log\Log when debug is false.
+     * Por defecto, los errores se muestran utilizando Debugger cuando debug es verdadero y se registran
+     * con Cake\Log\Log cuando debug es falso.
      *
-     * In CLI environments exceptions will be printed to stderr with a backtrace.
-     * In web environments an HTML page will be displayed for the exception.
-     * With debug true, framework errors like Missing Controller will be displayed.
-     * When debug is false, framework errors will be coerced into generic HTTP errors.
+     * En entornos CLI, las excepciones se imprimirán en stderr con un seguimiento de pila.
+     * En entornos web, se mostrará una página HTML para la excepción.
+     * Con debug en verdadero, los errores del framework como "Falta el controlador" se mostrarán.
+     * Cuando debug es falso, los errores del framework se convertirán en errores HTTP genéricos.
      *
-     * Options:
+     * Opciones:
      *
-     * - `errorLevel` - int - The level of errors you are interested in capturing.
-     * - `trace` - boolean - Whether backtraces should be included in
-     *   logged errors/exceptions.
-     * - `log` - boolean - Whether you want exceptions logged.
-     * - `exceptionRenderer` - string - The class responsible for rendering uncaught exceptions.
-     *   The chosen class will be used for both CLI and web environments. If you want different
-     *   classes used in CLI and web environments you'll need to write that conditional logic as well.
-     *   The conventional location for custom renderers is in `src/Error`. Your exception renderer needs to
-     *   implement the `render()` method and return either a string or Http\Response.
-     *   `errorRenderer` - string - The class responsible for rendering PHP errors. The selected
-     *   class will be used for both web and CLI contexts. If you want different classes for each environment
-     *   you'll need to write that conditional logic as well. Error renderers need to
-     *   to implement the `Cake\Error\ErrorRendererInterface`.
-     * - `skipLog` - array - List of exceptions to skip for logging. Exceptions that
-     *   extend one of the listed exceptions will also be skipped for logging.
-     *   E.g.:
+     * - `errorLevel` - int - El nivel de errores que te interesa capturar.
+     * - `trace` - booleano - Si se deben incluir los rastros de pila en los errores/excepciones registrados.
+     * - `log` - booleano - Si deseas que las excepciones se registren.
+     * - `exceptionRenderer` - string - La clase responsable de mostrar las excepciones no capturadas.
+     *   La clase seleccionada se utilizará para los entornos CLI y web. Si deseas clases diferentes para cada entorno,
+     *   necesitarás escribir esa lógica condicional también.
+     *   El lugar convencional para los renderizadores personalizados es en `src/Error`. Tu renderizador de excepciones debe
+     *   implementar el método `render()` y devolver ya sea un string o una Http\Response.
+     * - `errorRenderer` - string - La clase responsable de mostrar los errores PHP. La clase seleccionada se utilizará para ambos
+     *   contextos web y CLI. Si deseas clases diferentes para cada entorno, necesitarás escribir esa lógica condicional también.
+     *   Los renderizadores de errores deben implementar `Cake\Error\ErrorRendererInterface`.
+     * - `skipLog` - array - Lista de excepciones que se deben omitir para el registro. Las excepciones que
+     *   extiendan una de las excepciones listadas también serán omitidas para el registro.
+     *   Ejemplo:
      *   `'skipLog' => ['Cake\Http\Exception\NotFoundException', 'Cake\Http\Exception\UnauthorizedException']`
-     * - `extraFatalErrorMemory` - int - The number of megabytes to increase the memory limit by
-     *   when a fatal error is encountered. This allows
-     *   breathing room to complete logging or error handling.
-     * - `ignoredDeprecationPaths` - array - A list of glob-compatible file paths that deprecations
-     *   should be ignored in. Use this to ignore deprecations for plugins or parts of
-     *   your application that still emit deprecations.
+     * - `extraFatalErrorMemory` - int - La cantidad de megabytes para aumentar el límite de memoria cuando se encuentra un error fatal.
+     *   Esto permite tener espacio para completar el registro o el manejo de errores.
+     * - `ignoredDeprecationPaths` - array - Una lista de rutas compatibles con globs que se deben ignorar para las deprecaciones.
+     *   Usa esto para ignorar las deprecaciones de plugins o partes de tu aplicación que sigan generando deprecaciones.
      */
     'Error' => [
         'errorLevel' => E_ALL,
@@ -178,53 +169,35 @@ return [
     ],
 
     /*
-     * Debugger configuration
+     * Configuración del depurador
      *
-     * Define development error values for Cake\Error\Debugger
+     * Define los valores de error para desarrollo de Cake\Error\Debugger
      *
-     * - `editor` Set the editor URL format you want to use.
-     *   By default atom, emacs, macvim, phpstorm, sublime, textmate, and vscode are
-     *   available. You can add additional editor link formats using
-     *   `Debugger::addEditor()` during your application bootstrap.
-     * - `outputMask` A mapping of `key` to `replacement` values that
-     *   `Debugger` should replace in dumped data and logs generated by `Debugger`.
+     * - `editor` Establece el formato de URL del editor que deseas usar.
+     *   Por defecto, están disponibles atom, emacs, macvim, phpstorm, sublime, textmate y vscode.
+     *   Puedes agregar formatos adicionales de enlace de editor usando
+     *   `Debugger::addEditor()` durante el arranque de la aplicación.
+     * - `outputMask` Un mapeo de `clave` a `reemplazo` que
+     *   `Debugger` debe reemplazar en los datos y registros mostrados por `Debugger`.
      */
     'Debugger' => [
         'editor' => 'phpstorm',
     ],
 
     /*
-     * Email configuration.
-     *
-     * By defining transports separately from delivery profiles you can easily
-     * re-use transport configuration across multiple profiles.
-     *
-     * You can specify multiple configurations for production, development and
-     * testing.
-     *
-     * Each transport needs a `className`. Valid options are as follows:
-     *
-     *  Mail   - Send using PHP mail function
-     *  Smtp   - Send using SMTP
-     *  Debug  - Do not send the email, just return the result
-     *
-     * You can add custom transports (or override existing transports) by adding the
-     * appropriate file to src/Mailer/Transport. Transports should be named
-     * 'YourTransport.php', where 'Your' is the name of the transport.
-     */
+        * Configuración de transporte de correo electrónico
+        *
+        * Define cómo se deben enviar los correos electrónicos. Los transportes incluyen `MailTransport`, `SmtpTransport`, etc.
+        * Se configurará el transporte predeterminado a través de esta sección.
+        */
     'EmailTransport' => [
         'default' => [
             'className' => MailTransport::class,
-            /*
-             * The keys host, port, timeout, username, password, client and tls
-             * are used in SMTP transports
-             */
+
             'host' => 'localhost',
             'port' => 25,
             'timeout' => 30,
-            /*
-             * It is recommended to set these options through your environment or app_local.php
-             */
+
             //'username' => null,
             //'password' => null,
             'client' => null,
@@ -233,94 +206,64 @@ return [
         ],
     ],
 
-    /*
-     * Email delivery profiles
-     *
-     * Delivery profiles allow you to predefine various properties about email
-     * messages from your application and give the settings a name. This saves
-     * duplication across your application and makes maintenance and development
-     * easier. Each profile accepts a number of keys. See `Cake\Mailer\Mailer`
-     * for more information.
-     */
+        /*
+    * Perfiles de entrega de correo electrónico
+    *
+    * Los perfiles de entrega te permiten predefinir varias propiedades sobre los mensajes
+    * de correo electrónico de tu aplicación y darles un nombre a las configuraciones. Esto ahorra
+    * duplicación a lo largo de la aplicación y facilita el mantenimiento y desarrollo.
+    * Cada perfil acepta varias claves. Consulta `Cake\Mailer\Mailer`
+    * para más información.
+    */
     'Email' => [
         'default' => [
             'transport' => 'default',
             'from' => 'you@localhost',
-            /*
-             * Will by default be set to config value of App.encoding, if that exists otherwise to UTF-8.
-             */
-            //'charset' => 'utf-8',
-            //'headerCharset' => 'utf-8',
+
         ],
     ],
 
     /*
-     * Connection information used by the ORM to connect
-     * to your application's datastores.
-     *
-     * ### Notes
-     * - Drivers include Mysql Postgres Sqlite Sqlserver
-     *   See vendor\cakephp\cakephp\src\Database\Driver for the complete list
-     * - Do not use periods in database name - it may lead to errors.
-     *   See https://github.com/cakephp/cakephp/issues/6471 for details.
-     * - 'encoding' is recommended to be set to full UTF-8 4-Byte support.
-     *   E.g set it to 'utf8mb4' in MariaDB and MySQL and 'utf8' for any
-     *   other RDBMS.
-     */
+ * Información de conexión utilizada por el ORM para conectarse
+ * a los almacenes de datos de tu aplicación.
+ *
+ * ### Notas
+ * - Los controladores incluyen Mysql, Postgres, Sqlite, Sqlserver
+ *   Consulta vendor\cakephp\cakephp\src\Database\Driver para la lista completa
+ * - No utilices puntos en el nombre de la base de datos, ya que puede causar errores.
+ *   Consulta https://github.com/cakephp/cakephp/issues/6471 para más detalles.
+ * - Se recomienda establecer 'encoding' a UTF-8 completo con soporte de 4 bytes.
+ *   Ejemplo: ponlo en 'utf8mb4' en MariaDB y MySQL y 'utf8' para cualquier
+ *   otro RDBMS.
+ */
     'Datasources' => [
         /*
-         * These configurations should contain permanent settings used
-         * by all environments.
-         *
-         * The values in app_local.php will override any values set here
-         * and should be used for local and per-environment configurations.
-         *
-         * Environment variable-based configurations can be loaded here or
-         * in app_local.php depending on the application's needs.
-         */
+     * Estas configuraciones deberían contener configuraciones permanentes utilizadas
+     * por todos los entornos.
+     *
+     * Los valores en app_local.php sobrescribirán los valores establecidos aquí
+     * y deben usarse para configuraciones locales y por entorno.
+     *
+     * Las configuraciones basadas en variables de entorno pueden cargarse aquí o
+     * en app_local.php dependiendo de las necesidades de la aplicación.
+     */
         'default' => [
             'className' => Connection::class,
             'driver' => Mysql::class,
             'persistent' => false,
             'timezone' => 'UTC',
 
-            /*
-             * For MariaDB/MySQL the internal default changed from utf8 to utf8mb4, aka full utf-8 support
-             */
+
             'encoding' => 'utf8mb4',
 
-            /*
-             * If your MySQL server is configured with `skip-character-set-client-handshake`
-             * then you MUST use the `flags` config to set your charset encoding.
-             * For e.g. `'flags' => [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4']`
-             */
             'flags' => [],
             'cacheMetadata' => true,
             'log' => false,
-
-            /*
-             * Set identifier quoting to true if you are using reserved words or
-             * special characters in your table or column names. Enabling this
-             * setting will result in queries built using the Query Builder having
-             * identifiers quoted when creating SQL. It should be noted that this
-             * decreases performance because each query needs to be traversed and
-             * manipulated before being executed.
-             */
             'quoteIdentifiers' => false,
 
-            /*
-             * During development, if using MySQL < 5.6, uncommenting the
-             * following line could boost the speed at which schema metadata is
-             * fetched from the database. It can also be set directly with the
-             * mysql configuration directive 'innodb_stats_on_metadata = 0'
-             * which is the recommended value in production environments
-             */
-            //'init' => ['SET GLOBAL innodb_stats_on_metadata = 0'],
+
         ],
 
-        /*
-         * The test connection is used during the test suite.
-         */
         'test' => [
             'className' => Connection::class,
             'driver' => Mysql::class,
@@ -335,9 +278,7 @@ return [
         ],
     ],
 
-    /*
-     * Configures logging options
-     */
+
     'Log' => [
         'debug' => [
             'className' => FileLog::class,
@@ -355,7 +296,7 @@ return [
             'scopes' => null,
             'levels' => ['warning', 'error', 'critical', 'alert', 'emergency'],
         ],
-        // To enable this dedicated query log, you need to set your datasource's log flag to true
+
         'queries' => [
             'className' => FileLog::class,
             'path' => LOGS,
@@ -366,76 +307,76 @@ return [
     ],
 
     /*
-     * Session configuration.
-     *
-     * Contains an array of settings to use for session configuration. The
-     * `defaults` key is used to define a default preset to use for sessions, any
-     * settings declared here will override the settings of the default config.
-     *
-     * ## Options
-     *
-     * - `cookie` - The name of the cookie to use. Defaults to value set for `session.name` php.ini config.
-     *    Avoid using `.` in cookie names, as PHP will drop sessions from cookies with `.` in the name.
-     * - `cookiePath` - The url path for which session cookie is set. Maps to the
-     *   `session.cookie_path` php.ini config. Defaults to base path of app.
-     * - `timeout` - The time in minutes a session can be 'idle'. If no request is received in
-     *    this duration, the session will be expired and rotated. Pass 0 to disable idle timeout checks.
-     * - `defaults` - The default configuration set to use as a basis for your session.
-     *    There are four built-in options: php, cake, cache, database.
-     * - `handler` - Can be used to enable a custom session handler. Expects an
-     *    array with at least the `engine` key, being the name of the Session engine
-     *    class to use for managing the session. CakePHP bundles the `CacheSession`
-     *    and `DatabaseSession` engines.
-     * - `ini` - An associative array of additional 'session.*` ini values to set.
-     *
-     * Within the `ini` key, you will likely want to define:
-     *
-     * - `session.cookie_lifetime` - The number of seconds that cookies are valid for. This
-     *    should be longer than `Session.timeout`.
-     * - `session.gc_maxlifetime` - The number of seconds after which a session is considered 'garbage'
-     *    that can be deleted by PHP's session cleanup behavior. This value should be greater than both
-     *    `Sesssion.timeout` and `session.cookie_lifetime`.
-     *
-     * The built-in `defaults` options are:
-     *
-     * - 'php' - Uses settings defined in your php.ini.
-     * - 'cake' - Saves session files in CakePHP's /tmp directory.
-     * - 'database' - Uses CakePHP's database sessions.
-     * - 'cache' - Use the Cache class to save sessions.
-     *
-     * To define a custom session handler, save it at src/Http/Session/<name>.php.
-     * Make sure the class implements PHP's `SessionHandlerInterface` and set
-     * Session.handler to <name>
-     *
-     * To use database sessions, load the SQL file located at config/schema/sessions.sql
-     */
+ * Configuración de la sesión.
+ *
+ * Contiene un array de configuraciones para usar en la configuración de la sesión. La
+ * clave `defaults` se usa para definir una configuración predeterminada para las sesiones, cualquier
+ * configuración declarada aquí sobrescribirá los ajustes de la configuración predeterminada.
+ *
+ * ## Opciones
+ *
+ * - `cookie` - El nombre de la cookie a usar. Por defecto, se usa el valor configurado en `session.name` de php.ini.
+ *    Evita usar `.` en los nombres de las cookies, ya que PHP eliminará las sesiones de cookies con `.` en el nombre.
+ * - `cookiePath` - La ruta URL para la que se establece la cookie de sesión. Se mapea con la
+ *   configuración `session.cookie_path` de php.ini. Por defecto, es la ruta base de la aplicación.
+ * - `timeout` - El tiempo en minutos que una sesión puede estar 'inactiva'. Si no se recibe una solicitud en
+ *    este tiempo, la sesión se expirará y rotará. Pasa 0 para deshabilitar las comprobaciones de inactividad.
+ * - `defaults` - La configuración predeterminada para usar como base para tu sesión.
+ *    Existen cuatro opciones integradas: php, cake, cache, database.
+ * - `handler` - Se puede usar para habilitar un controlador de sesión personalizado. Se espera un
+ *    array con al menos la clave `engine`, que es el nombre de la clase del motor de sesión
+ *    para usar en la gestión de la sesión. CakePHP incluye los motores `CacheSession`
+ *    y `DatabaseSession`.
+ * - `ini` - Un array asociativo de valores adicionales de 'session.*` para configurar.
+ *
+ * Dentro de la clave `ini`, probablemente querrás definir:
+ *
+ * - `session.cookie_lifetime` - El número de segundos durante los cuales las cookies son válidas. Esto
+ *    debe ser mayor que `Session.timeout`.
+ * - `session.gc_maxlifetime` - El número de segundos después de los cuales una sesión se considera 'basura'
+ *    y puede ser eliminada por el comportamiento de limpieza de sesiones de PHP. Este valor debe ser mayor que ambos
+ *    `Session.timeout` y `session.cookie_lifetime`.
+ *
+ * Las opciones integradas de `defaults` son:
+ *
+ * - 'php' - Usa configuraciones definidas en tu php.ini.
+ * - 'cake' - Guarda archivos de sesión en el directorio /tmp de CakePHP.
+ * - 'database' - Usa sesiones en la base de datos de CakePHP.
+ * - 'cache' - Usa la clase Cache para guardar sesiones.
+ *
+ * Para definir un controlador de sesión personalizado, guárdalo en src/Http/Session/<nombre>.php.
+ * Asegúrate de que la clase implemente la interfaz `SessionHandlerInterface` de PHP y configura
+ * Session.handler a <nombre>
+ *
+ * Para usar sesiones en la base de datos, carga el archivo SQL ubicado en config/schema/sessions.sql
+ */
     'Session' => [
         'defaults' => 'php',
     ],
 
     /**
-     * DebugKit configuration.
-     *
-     * Contains an array of configurations to apply to the DebugKit plugin, if loaded.
-     * Documentation: https://book.cakephp.org/debugkit/5/en/index.html#configuration
-     *
-     * ## Options
-     *
-     *  - `panels` - Enable or disable panels. The key is the panel name, and the value is true to enable,
-     *     or false to disable.
-     *  - `includeSchemaReflection` - Set to true to enable logging of schema reflection queries. Disabled by default.
-     *  - `safeTld` - Set an array of whitelisted TLDs for local development.
-     *  - `forceEnable` - Force DebugKit to display. Careful with this, it is usually safer to simply whitelist
-     *     your local TLDs.
-     *  - `ignorePathsPattern` - Regex pattern (including delimiter) to ignore paths.
-     *     DebugKit won’t save data for request URLs that match this regex.
-     *  - `ignoreAuthorization` - Set to true to ignore Cake Authorization plugin for DebugKit requests.
-     *     Disabled by default.
-     *  - `maxDepth` - Defines how many levels of nested data should be shown in general for debug output.
-     *     Default is 5. WARNING: Increasing the max depth level can lead to an out of memory error.
-     *  - `variablesPanelMaxDepth` - Defines how many levels of nested data should be shown in the variables tab.
-     *     Default is 5. WARNING: Increasing the max depth level can lead to an out of memory error.
-     */
+ * Configuración de DebugKit.
+ *
+ * Contiene un array de configuraciones para aplicar al plugin DebugKit, si está cargado.
+ * Documentación: https://book.cakephp.org/debugkit/5/es/index.html#configuracion
+ *
+ * ## Opciones
+ *
+ *  - `panels` - Habilitar o deshabilitar paneles. La clave es el nombre del panel, y el valor es verdadero para habilitar,
+ *     o falso para deshabilitar.
+ *  - `includeSchemaReflection` - Establecer a verdadero para habilitar el registro de consultas de reflexión de esquema. Deshabilitado por defecto.
+ *  - `safeTld` - Establecer un array de TLDs permitidos para el desarrollo local.
+ *  - `forceEnable` - Forzar la visualización de DebugKit. Ten cuidado con esto, generalmente es más seguro simplemente permitir
+ *     tus TLDs locales.
+ *  - `ignorePathsPattern` - Patrón regex (incluyendo delimitadores) para ignorar rutas.
+ *     DebugKit no guardará datos para URLs de solicitudes que coincidan con este regex.
+ *  - `ignoreAuthorization` - Establecer a verdadero para ignorar el plugin Cake Authorization para las solicitudes de DebugKit.
+ *     Deshabilitado por defecto.
+ *  - `maxDepth` - Define cuántos niveles de datos anidados deben mostrarse en general para la salida de depuración.
+ *     El valor predeterminado es 5. ADVERTENCIA: Aumentar el nivel máximo de profundidad puede causar un error de falta de memoria.
+ *  - `variablesPanelMaxDepth` - Define cuántos niveles de datos anidados deben mostrarse en la pestaña de variables.
+ *     El valor predeterminado es 5. ADVERTENCIA: Aumentar el nivel máximo de profundidad puede causar un error de falta de memoria.
+ */
     'DebugKit' => [
         'forceEnable' => filter_var(env('DEBUG_KIT_FORCE_ENABLE', false), FILTER_VALIDATE_BOOLEAN),
         'safeTld' => env('DEBUG_KIT_SAFE_TLD', null),

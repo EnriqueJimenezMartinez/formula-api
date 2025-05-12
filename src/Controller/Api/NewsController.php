@@ -12,6 +12,11 @@ use DateTime;
  */
 class NewsController extends ApiController
 {
+    /**
+     * Initialize method
+     *
+     * @return void
+     */
     public function initialize(): void
     {
         parent::initialize();
@@ -25,7 +30,7 @@ class NewsController extends ApiController
     public function index()
     {
         $query = $this->News->find()
-            ->contain(['Users','Tags']);
+            ->contain(['Users', 'Tags']);
         $news = $this->paginate($query);
 
         $this->respond($news);
@@ -34,31 +39,41 @@ class NewsController extends ApiController
     /**
      * View method
      *
-     * @param string|null $id News id.
+     * @param string|null $slug News slug.
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($slug = null)
+    public function view(?string $slug = null)
     {
-
-        $news = $this->News->find('all', where: ['slug IS' => $slug], contain: ['Users', 'Tags'])
-        ->first();
+        $news = $this->News->find('all', [
+            'where' => ['slug IS' => $slug],
+            'contain' => ['Users', 'Tags'],
+        ])->first();
 
         $this->respond($news);
     }
 
-    public function lastDate(?string $date){
-        if(!$date){
+    /**
+     * LastDate method
+     *
+     * @param string|null $date The input date string.
+     * @return void
+     */
+    public function lastDate(?string $date): void
+    {
+        if (!$date) {
             $this->respond(null, 'error', 'Fecha vacía', 401);
+
             return;
         }
+
         $date = new DateTime($date);
-        $lastNews = $this->News->find('all', fields: ['created'])
-        ->orderBy(['created' => 'ASC'])
-        ->first();
 
-        $respuesta=[$lastNews,$date];
+        $lastNews = $this->News->find('all', [
+            'fields' => ['created'],
+        ])->orderBy(['created' => 'ASC'])->first();
+
+        $respuesta = [$lastNews, $date];
         $this->respond($respuesta);
-
     }
 }

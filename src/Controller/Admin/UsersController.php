@@ -7,16 +7,16 @@ use App\Controller\AppController;
 use Cake\Event\EventInterface;
 
 /**
- * Users Controller
+ * Controlador de Usuarios
  *
  * @property \App\Model\Table\UsersTable $Users
  */
 class UsersController extends AppController
 {
     /**
-     * Index method
+     * Método Index
      *
-     * @return \Cake\Http\Response|null|void Renders view
+     * @return \Cake\Http\Response|null|void Renderiza la vista
      */
     public function index()
     {
@@ -27,11 +27,11 @@ class UsersController extends AppController
     }
 
     /**
-     * View method
+     * Método View
      *
-     * @param string|null $id User id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @param string|null $id Id del usuario.
+     * @return \Cake\Http\Response|null|void Renderiza la vista
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException Si no se encuentra el registro.
      */
     public function view(?string $id = null)
     {
@@ -40,9 +40,9 @@ class UsersController extends AppController
     }
 
     /**
-     * Add method
+     * Método Add
      *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
+     * @return \Cake\Http\Response|null|void Redirige en caso de éxito, renderiza la vista en caso contrario.
      */
     public function add()
     {
@@ -50,21 +50,21 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
+                $this->Flash->success(__('El usuario ha sido guardado.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            $this->Flash->error(__('El usuario no pudo ser guardado. Por favor, intente nuevamente.'));
         }
         $this->set(compact('user'));
     }
 
     /**
-     * Edit method
+     * Método Edit
      *
-     * @param string|null $id User id.
-     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @param string|null $id Id del usuario.
+     * @return \Cake\Http\Response|null|void Redirige en caso de éxito, renderiza la vista en caso contrario.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException Si no se encuentra el registro.
      */
     public function edit(?string $id = null)
     {
@@ -72,30 +72,30 @@ class UsersController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
+                $this->Flash->success(__('El usuario ha sido guardado.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            $this->Flash->error(__('El usuario no pudo ser guardado. Por favor, intente nuevamente.'));
         }
         $this->set(compact('user'));
     }
 
     /**
-     * Delete method
+     * Método Delete
      *
-     * @param string|null $id User id.
-     * @return \Cake\Http\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     * @param string|null $id Id del usuario.
+     * @return \Cake\Http\Response|null Redirige al índice.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException Si no se encuentra el registro.
      */
     public function delete(?string $id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
         if ($this->Users->delete($user)) {
-            $this->Flash->success(__('The user has been deleted.'));
+            $this->Flash->success(__('El usuario ha sido eliminado.'));
         } else {
-            $this->Flash->error(__('The user could not be deleted. Please, try again.'));
+            $this->Flash->error(__('El usuario no pudo ser eliminado. Por favor, intente nuevamente.'));
         }
 
         return $this->redirect(['action' => 'index']);
@@ -115,8 +115,8 @@ class UsersController extends AppController
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
-        // Configure the login action to not require authentication, preventing
-        // the infinite redirect loop issue
+        // Configura la acción de login para no requerir autenticación, evitando
+        // el problema de bucles de redirección
         $this->Authentication->addUnauthenticatedActions(['login', 'add']);
     }
 
@@ -133,7 +133,7 @@ class UsersController extends AppController
     {
         $this->request->allowMethod(['get', 'post']);
         $result = $this->Authentication->getResult();
-        // regardless of POST or GET, redirect if user is logged in
+        // Independientemente de si es POST o GET, redirige si el usuario está logueado
         if ($result && $result->isValid()) {
             $redirect = $this->request->getQuery('redirect', [
                 'controller' => 'users',
@@ -143,7 +143,7 @@ class UsersController extends AppController
             return $this->redirect($redirect);
         }
         if ($this->request->is('post') && !$result->isValid()) {
-            $this->Flash->error(__('Invalid username or password'));
+            $this->Flash->error(__('Usuario o contraseña inválidos'));
         }
     }
 
@@ -160,7 +160,7 @@ class UsersController extends AppController
     public function logout()
     {
         $result = $this->Authentication->getResult();
-        // regardless of POST or GET, redirect if user is logged in
+        // Independientemente de si es POST o GET, redirige si el usuario está logueado
         if ($result && $result->isValid()) {
             $this->Authentication->logout();
 

@@ -6,24 +6,22 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Tag Entity
+ * Entidad Tag (Etiqueta)
  *
- * @property int $id
- * @property string $name
- * @property string $description
- * @property \Cake\I18n\DateTime $created
- * @property \Cake\I18n\DateTime $modified
+ * Representa una etiqueta que puede estar asociada a una o varias noticias.
  *
- * @property \App\Model\Entity\News[] $news
+ * @property int $id Identificador único de la etiqueta.
+ * @property string $name Nombre de la etiqueta.
+ * @property string $description Descripción de la etiqueta.
+ * @property \Cake\I18n\DateTime $created Fecha de creación.
+ * @property \Cake\I18n\DateTime $modified Fecha de última modificación.
+ *
+ * @property \App\Model\Entity\News[] $news Lista de noticias asociadas a esta etiqueta.
  */
 class Tag extends Entity
 {
     /**
-     * Fields that can be mass assigned using newEntity() or patchEntity().
-     *
-     * Note that when '*' is set to true, this allows all unspecified fields to
-     * be mass assigned. For security purposes, it is advised to set '*' to false
-     * (or remove it), and explicitly make individual fields accessible as needed.
+     * Campos que pueden asignarse en masa usando newEntity() o patchEntity().
      *
      * @var array<string, bool>
      */
@@ -32,6 +30,6 @@ class Tag extends Entity
         'description' => true,
         'created' => true,
         'modified' => true,
-        'news' => true,
+        'news' => true, // Relación con las noticias asociadas.
     ];
 }

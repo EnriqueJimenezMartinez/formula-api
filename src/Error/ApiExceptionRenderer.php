@@ -19,9 +19,9 @@ class ApiExceptionRenderer extends WebExceptionRenderer
 
         if ($exception instanceof UnauthenticatedException) {
             $body = json_encode([
-                'status'  => 'error',
+                'status' => 'error',
                 'message' => $exception->getMessage() ?: 'Unauthorized',
-                'data'    => null,
+                'data' => null,
             ]);
 
             return (new Response())

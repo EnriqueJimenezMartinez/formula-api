@@ -1,22 +1,10 @@
 <?php
 declare(strict_types=1);
 
-/**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link      https://cakephp.org CakePHP(tm) Project
- * @since     3.3.0
- * @license   https://opensource.org/licenses/mit-license.php MIT License
- */
 namespace App;
 
 use App\Error\ApiExceptionRenderer;
+use App\Middleware\CorsMiddleware;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceInterface;
 use Authentication\AuthenticationServiceProviderInterface;
@@ -35,25 +23,22 @@ use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\Routing\Router;
 use Psr\Http\Message\ServerRequestInterface;
-use App\Middleware\CorsMiddleware;
+
 /**
- * Application setup class.
+ * Clase principal de configuración de la aplicación.
  *
- * This defines the bootstrapping logic and middleware layers you
- * want to use in your application.
- *
- * @extends \Cake\Http\BaseApplication<\App\Application>
+ * Define la lógica de arranque y la cola de middlewares que se utilizan.
  */
 class Application extends BaseApplication implements AuthenticationServiceProviderInterface
 {
     /**
-     * Load all the application configuration and bootstrap logic.
+     * Carga la configuración y el arranque de la aplicación.
      *
      * @return void
      */
     public function bootstrap(): void
     {
-        // Call parent to load bootstrap from files.
+        // Llama al método padre para cargar bootstrap desde los archivos de configuración.
         parent::bootstrap();
 
         if (PHP_SAPI !== 'cli') {
@@ -62,105 +47,94 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                 (new TableLocator())->allowFallbackClass(false),
             );
         }
+
+        // Añade el plugin de autenticación de usuarios
         $this->addPlugin('Authentication');
     }
 
     /**
-     * Setup the middleware queue your application will use.
+     * Configura los middlewares que utilizará la aplicación.
      *
-     * @param \Cake\Http\MiddlewareQueue $middlewareQueue The middleware queue to setup.
-     * @return \Cake\Http\MiddlewareQueue The updated middleware queue.
+     * @param \Cake\Http\MiddlewareQueue $middlewareQueue Cola de middlewares a configurar.
+     * @return \Cake\Http\MiddlewareQueue Cola de middlewares actualizada.
      */
     public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
     {
         $middlewareQueue
-            // Catch any exceptions in the lower layers,
-            // and make an error page/response
+            // Captura cualquier excepción que se produzca en capas inferiores
+            // y genera una respuesta de error adecuada
             ->add(new ErrorHandlerMiddleware([
                 'exceptionRenderer' => ApiExceptionRenderer::class,
             ], $this))
 
-            // Handle plugin/theme assets like CakePHP normally does.
+            // Gestiona los archivos estáticos de plugins y temas
             ->add(new AssetMiddleware([
                 'cacheTime' => Configure::read('Asset.cacheTime'),
             ]))
 
-            // Add routing middleware.
-            // If you have a large number of routes connected, turning on routes
-            // caching in production could improve performance.
-            // See https://github.com/CakeDC/cakephp-cached-routing
+            // Añade el middleware de rutas, necesario para procesar URLs
             ->add(new RoutingMiddleware($this))
 
+            // Middleware personalizado para permitir CORS
             ->add(new CorsMiddleware())
 
-            // Parse various types of encoded request bodies so that they are
-            // available as array through $request->getData()
-            // https://book.cakephp.org/5/en/controllers/middleware.html#body-parser-middleware
+            // Convierte automáticamente el cuerpo de las peticiones a un array accesible
             ->add(new BodyParserMiddleware())
 
+            // Middleware de autenticación (identifica al usuario en cada petición)
             ->add(new AuthenticationMiddleware($this));
-            /*->add(function ($request, $handler) {
-                if ($request->getParam('prefix') === 'Admin') {
-                    $service = $this->getAuthenticationService($request);
-                    $authMiddleware = new \Authentication\Middleware\AuthenticationMiddleware($service);
-                    return $authMiddleware->process($request, $handler);
-                }
 
-                return $handler->handle($request);
-            })*/
-            // Cross Site Request Forgery (CSRF) Protection Middleware
-            // https://book.cakephp.org/5/en/security/csrf.html#cross-site-request-forgery-csrf-middleware
-            $csrf = new CsrfProtectionMiddleware([
-                'httpOnly' => true,
-            ]);
-            $csrf->skipCheckCallback(function (ServerRequestInterface $request): bool {
-                // Si el prefijo es “api”, NO aplicamos CSRF
-                    $params = $request->getAttribute('params') ?? [];
-                    $params = $request->getAttribute('params') ?? [];
-                    $prefix = isset($params['prefix']) ? strtolower((string)$params['prefix']) : '';
+        // Middleware de protección contra ataques CSRF
+        $csrf = new CsrfProtectionMiddleware([
+            'httpOnly' => true,
+        ]);
 
-                return $prefix === 'api';
-            });
-            $middlewareQueue->add($csrf);
+        // Se desactiva la protección CSRF si el prefijo de la ruta es "api"
+        $csrf->skipCheckCallback(function (ServerRequestInterface $request): bool {
+            $params = $request->getAttribute('params') ?? [];
+            $prefix = isset($params['prefix']) ? strtolower((string)$params['prefix']) : '';
+
+            return $prefix === 'api';
+        });
+
+        $middlewareQueue->add($csrf);
 
         return $middlewareQueue;
     }
 
     /**
-     * Register application container services.
+     * Registro de servicios personalizados en el contenedor de dependencias (opcional).
      *
-     * @param \Cake\Core\ContainerInterface $container The Container to update.
+     * @param \Cake\Core\ContainerInterface $container Contenedor a modificar.
      * @return void
-     * @link https://book.cakephp.org/5/en/development/dependency-injection.html#dependency-injection
      */
     public function services(ContainerInterface $container): void
     {
+        // Actualmente no se registran servicios personalizados.
     }
 
     /**
-     * Configura y devuelve el servicio de autenticación para la aplicación.
+     * Configura y devuelve el servicio de autenticación según el tipo de solicitud.
      *
-     * Este método se llama automáticamente por el plugin Authentication para definir
-     * qué métodos de autenticación e identificación se usan en función del tipo de solicitud.
+     * Distingue entre solicitudes API (prefijo "Api") y del panel de administración (prefijo "Admin"):
      *
-     * Se distingue entre solicitudes API (prefijo "Api") y solicitudes del panel de administración (prefijo "Admin").
+     * - Para API:
+     *   - Se usa autenticación JWT (token en cabecera Authorization).
+     *   - No se permiten redirecciones.
+     *   - Se lanza error 401 si no hay token o es inválido.
      *
-     * Para API:
-     * - Usa autenticación JWT en cabecera "Authorization".
-     * - No permite redirecciones.
-     * - Lanza error 401 si no hay token o es inválido.
-     *
-     * Para Admin (panel):
-     * - Usa autenticación de sesión + formulario.
-     * - Permite redirigir a /admin/users/login si no hay sesión activa.
+     * - Para Admin:
+     *   - Se usa sesión + formulario de login.
+     *   - Permite redirigir al formulario de login si no hay sesión activa.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      * @return \Authentication\AuthenticationServiceInterface
      */
     public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
     {
-        // Load the authenticators, you want session first
         $prefix = $request->getAttribute('params')['prefix'] ?? null;
+
+        // Configuración para autenticación API (JWT)
         if ($prefix === 'Api') {
             $authenticationService = new AuthenticationService([
                 'unauthenticatedRedirect' => null,
@@ -172,17 +146,19 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                     ],
                 ],
             ]);
-            // --- Scope API: solo JWT ---
+
+            // Identificador JWT
             $authenticationService->loadIdentifier('Authentication.JwtSubject');
+
+            // Autenticador JWT usando el token en la cabecera "Authorization"
             $authenticationService->loadAuthenticator('Authentication.Jwt', [
-                // Tu secret salt en config/app.php > Security.salt
                 'secretKey' => Configure::read('JWT_SECRET'),
                 'header' => 'Authorization',
                 'tokenPrefix' => 'Bearer',
                 'algorithm' => 'HS256',
-                // opcional: permitir token en query (?token=…)
-                //'queryParam'   => 'token',
             ]);
+
+            // También se permite login por email y password en /api/users/login
             $fields = [
                 AbstractIdentifier::CREDENTIAL_USERNAME => 'email',
                 AbstractIdentifier::CREDENTIAL_PASSWORD => 'password',
@@ -193,6 +169,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                 'loginUrl' => '/api/users/login',
             ]);
         } else {
+            // Configuración para panel de administración (login por sesión y formulario)
             $authenticationService = new AuthenticationService([
                 'unauthenticatedRedirect' => Router::url([
                     'controller' => 'Users',
@@ -203,15 +180,18 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                 'queryParam' => 'redirect',
             ]);
 
-            // Load identifiers, ensure we check email and password fields
+            // Identificación por email y contraseña
             $authenticationService->loadIdentifier('Authentication.Password', [
                 'fields' => [
                     'username' => 'email',
                     'password' => 'password',
                 ],
             ]);
+
+            // Autenticación por sesión activa
             $authenticationService->loadAuthenticator('Authentication.Session');
-            // Configure form data check to pick email and password
+
+            // Autenticación por formulario (login manual)
             $authenticationService->loadAuthenticator('Authentication.Form', [
                 'fields' => [
                     'username' => 'email',

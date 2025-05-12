@@ -2,17 +2,17 @@
 declare(strict_types=1);
 
 /**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
+ * CakePHP(tm) : Framework de Desarrollo Rápido (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
+ * Licenciado bajo La Licencia MIT
+ * Para obtener la información completa de los derechos de autor y la licencia, consulta el archivo LICENSE.txt
+ * Las distribuciones de archivos deben mantener la nota de copyright mencionada anteriormente.
  *
  * @copyright Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link      https://cakephp.org CakePHP(tm) Project
+ * @link      https://cakephp.org Proyecto CakePHP(tm)
  * @since     0.2.9
- * @license   https://opensource.org/licenses/mit-license.php MIT License
+ * @license   https://opensource.org/licenses/mit-license.php Licencia MIT
  */
 namespace App\Controller;
 
@@ -20,21 +20,21 @@ use Cake\Controller\Controller;
 use Cake\Event\EventInterface;
 
 /**
- * Application Controller
+ * Controlador de la aplicación
  *
- * Add your application-wide methods in the class below, your controllers
- * will inherit them.
+ * Añade tus métodos a nivel de aplicación en la clase abajo, los controladores
+ * los heredarán.
  *
  * @link https://book.cakephp.org/5/en/controllers.html#the-app-controller
  */
 class AppController extends Controller
 {
     /**
-     * Initialization hook method.
+     * Método de inicialización.
      *
-     * Use this method to add common initialization code like loading components.
+     * Usa este método para añadir código de inicialización común como la carga de componentes.
      *
-     * e.g. `$this->loadComponent('FormProtection');`
+     * Ejemplo: `$this->loadComponent('FormProtection');`
      *
      * @return void
      */
@@ -45,20 +45,30 @@ class AppController extends Controller
         $this->loadComponent('Flash');
 
         /*
-         * Enable the following component for recommended CakePHP form protection settings.
-         * see https://book.cakephp.org/5/en/controllers/components/form-protection.html
+         * Habilita el siguiente componente para la configuración recomendada de protección de formularios en CakePHP.
+         * ver https://book.cakephp.org/5/en/controllers/components/form-protection.html
          */
         //$this->loadComponent('FormProtection');
 
         $this->loadComponent('Authentication.Authentication');
     }
 
+    /**
+     * Método ejecutado antes de cada acción del controlador.
+     *
+     * - Llama al método padre para mantener el comportamiento por defecto.
+     * - Para todos los controladores, se hace pública la acción `login`.
+     * - En el caso de los controladores fuera del prefijo `api`, también
+     *   podrían hacerse públicas `index` y `view` (ejemplo comentado).
+     *
+     * @param \Cake\Event\EventInterface $event Evento de filtro previo.
+     * @return void
+     */
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
-    // for all controllers in our application, make index and view
-    // actions public, skipping the authentication check
-
+        // para todos los controladores de nuestra aplicación, hacer públicos los métodos index y view,
+        // saltando la verificación de autenticación
 
         $prefix = $this->request->getAttribute('params')['prefix'] ?? null;
         if (strtolower((string)$prefix) !== 'api') {

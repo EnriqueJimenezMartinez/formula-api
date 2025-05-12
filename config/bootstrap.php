@@ -1,34 +1,32 @@
 <?php
-declare(strict_types=1);
-
 /**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
+ * CakePHP(tm) : Framework de Desarrollo Rápido (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
+ * Licenciado bajo la Licencia MIT
+ * Para obtener la información completa sobre derechos de autor y licencia, consulta LICENSE.txt
+ * Las redistribuciones de archivos deben retener el aviso de derechos de autor anterior.
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link          https://cakephp.org CakePHP(tm) Project
+ * @link          https://cakephp.org Proyecto CakePHP(tm)
  * @since         0.10.8
- * @license       https://opensource.org/licenses/mit-license.php MIT License
+ * @license       https://opensource.org/licenses/mit-license.php Licencia MIT
  */
 
 /*
- * This file is loaded by your src/Application.php bootstrap method.
- * Feel free to extend/extract parts of the bootstrap process into your own files
- * to suit your needs/preferences.
+ * Este archivo es cargado por el método bootstrap de tu archivo src/Application.php.
+ * Siéntete libre de extender o extraer partes del proceso de arranque a tus propios archivos
+ * para ajustarlo a tus necesidades o preferencias.
  */
 
 /*
- * Configure paths required to find CakePHP + general filepath constants
+ * Configurar las rutas necesarias para encontrar CakePHP + constantes de rutas generales
  */
 require __DIR__ . DIRECTORY_SEPARATOR . 'paths.php';
 
 /*
- * Bootstrap CakePHP
- * Currently all this does is initialize the router (without loading your routes)
+ * Inicializar CakePHP
+ * Actualmente, todo esto hace es inicializar el enrutador (sin cargar tus rutas).
  */
 require CORE_PATH . 'config' . DS . 'bootstrap.php';
 
@@ -46,23 +44,23 @@ use Cake\Routing\Router;
 use Cake\Utility\Security;
 
 /*
- * Load global functions for collections, translations, debugging etc.
+ * Cargar funciones globales para colecciones, traducciones, depuración, etc.
  */
 require CAKE . 'functions.php';
 
 /*
- * See https://github.com/josegonzalez/php-dotenv for API details.
+ * Consulta https://github.com/josegonzalez/php-dotenv para detalles de la API.
  *
- * Uncomment block of code below if you want to use `.env` file during development.
- * You should copy `config/.env.example` to `config/.env` and set/modify the
- * variables as required.
+ * Descomenta el bloque de código de abajo si deseas usar el archivo `.env` durante el desarrollo.
+ * Deberías copiar `config/.env.example` a `config/.env` y establecer/modificar las
+ * variables según sea necesario.
  *
- * The purpose of the .env file is to emulate the presence of the environment
- * variables like they would be present in production.
+ * El propósito del archivo .env es emular la presencia de las variables de entorno
+ * como estarían en producción.
  *
- * If you use .env files, be careful to not commit them to source control to avoid
- * security risks. See https://github.com/josegonzalez/php-dotenv#general-security-information
- * for more information for recommended practices.
+ * Si usas archivos .env, ten cuidado de no cometerlos al control de versiones para evitar
+ * riesgos de seguridad. Consulta https://github.com/josegonzalez/php-dotenv#general-security-information
+ * para obtener más información sobre las prácticas recomendadas.
 */
 // if (!env('APP_NAME') && file_exists(CONFIG . '.env')) {
 //     $dotenv = new \josegonzalez\Dotenv\Loader([CONFIG . '.env']);
@@ -73,11 +71,11 @@ require CAKE . 'functions.php';
 // }
 
 /*
- * Initializes default Config store and loads the main configuration file (app.php)
+ * Inicializa el almacén de configuración por defecto y carga el archivo de configuración principal (app.php)
  *
- * CakePHP contains 2 configuration files after project creation:
- * - `config/app.php` for the default application configuration.
- * - `config/app_local.php` for environment specific configuration.
+ * CakePHP contiene 2 archivos de configuración después de la creación del proyecto:
+ * - `config/app.php` para la configuración predeterminada de la aplicación.
+ * - `config/app_local.php` para la configuración específica del entorno.
  */
 try {
     Configure::config('default', new PhpConfig());
@@ -87,15 +85,15 @@ try {
 }
 
 /*
- * Load an environment local configuration file to provide overrides to your configuration.
- * Notice: For security reasons app_local.php **should not** be included in your git repo.
+ * Cargar un archivo de configuración local del entorno para proporcionar sobrecargas a tu configuración.
+ * Nota: Por razones de seguridad, app_local.php **no debe** incluirse en tu repositorio git.
  */
 if (file_exists(CONFIG . 'app_local.php')) {
     Configure::load('app_local', 'default');
 }
 
 /*
- * When debug = true the metadata cache should only last for a short time.
+ * Cuando debug = true, la caché de metadatos solo debe durar un tiempo corto.
  */
 if (Configure::read('debug')) {
     Configure::write('Cache._cake_model_.duration', '+2 minutes');
@@ -103,37 +101,37 @@ if (Configure::read('debug')) {
 }
 
 /*
- * Set the default server timezone. Using UTC makes time calculations / conversions easier.
- * Check https://php.net/manual/en/timezones.php for list of valid timezone strings.
+ * Establecer la zona horaria predeterminada del servidor. Usar UTC facilita los cálculos y conversiones de tiempo.
+ * Consulta https://php.net/manual/es/timezones.php para obtener una lista de cadenas de zona horaria válidas.
  */
 date_default_timezone_set(Configure::read('App.defaultTimezone'));
 
 /*
- * Configure the mbstring extension to use the correct encoding.
+ * Configurar la extensión mbstring para usar la codificación correcta.
  */
 mb_internal_encoding(Configure::read('App.encoding'));
 
 /*
- * Set the default locale. This controls how dates, number and currency is
- * formatted and sets the default language to use for translations.
+ * Establecer el idioma predeterminado. Esto controla cómo se formatean las fechas, los números y las monedas,
+ * y establece el idioma predeterminado para las traducciones.
  */
 ini_set('intl.default_locale', Configure::read('App.defaultLocale'));
 
 /*
- * Register application error and exception handlers.
+ * Registrar los manejadores de errores y excepciones de la aplicación.
  */
 (new ErrorTrap(Configure::read('Error')))->register();
 (new ExceptionTrap(Configure::read('Error')))->register();
 
 /*
- * CLI/Command specific configuration.
+ * Configuración específica para CLI/Comandos.
  */
 if (PHP_SAPI === 'cli') {
-    // Set the fullBaseUrl to allow URLs to be generated in commands.
-    // This is useful when sending email from commands.
+    // Establecer el fullBaseUrl para permitir la generación de URLs en los comandos.
+    // Esto es útil cuando se envía un correo electrónico desde comandos.
     // Configure::write('App.fullBaseUrl', php_uname('n'));
 
-    // Set logs to different files so they don't have permission conflicts.
+    // Establecer los logs en archivos diferentes para evitar conflictos de permisos.
     if (Configure::check('Log.debug')) {
         Configure::write('Log.debug.file', 'cli-debug');
     }
@@ -143,19 +141,19 @@ if (PHP_SAPI === 'cli') {
 }
 
 /*
- * Set the full base URL.
- * This URL is used as the base of all absolute links.
- * Can be very useful for CLI/Commandline applications.
+ * Establecer la URL base completa.
+ * Esta URL se usa como base de todos los enlaces absolutos.
+ * Puede ser muy útil para aplicaciones CLI/Commandline.
  */
 $fullBaseUrl = Configure::read('App.fullBaseUrl');
 if (!$fullBaseUrl) {
     /*
-     * When using proxies or load balancers, SSL/TLS connections might
-     * get terminated before reaching the server. If you trust the proxy,
-     * you can enable `$trustProxy` to rely on the `X-Forwarded-Proto`
-     * header to determine whether to generate URLs using `https`.
+     * Al usar proxies o balanceadores de carga, las conexiones SSL/TLS pueden
+     * terminarse antes de llegar al servidor. Si confías en el proxy,
+     * puedes habilitar `$trustProxy` para depender del encabezado `X-Forwarded-Proto`
+     * para determinar si generar URLs usando `https`.
      *
-     * See also https://book.cakephp.org/5/en/controllers/request-response.html#trusting-proxy-headers
+     * Consulta también https://book.cakephp.org/5/en/controllers/request-response.html#trusting-proxy-headers
      */
     $trustProxy = false;
 
@@ -176,8 +174,8 @@ if ($fullBaseUrl) {
 unset($fullBaseUrl);
 
 /*
- * Apply the loaded configuration settings to their respective systems.
- * This will also remove the loaded config data from memory.
+ * Aplicar la configuración cargada a sus respectivos sistemas.
+ * Esto también eliminará los datos de configuración cargados de la memoria.
  */
 Cache::setConfig(Configure::consume('Cache'));
 ConnectionManager::setConfig(Configure::consume('Datasources'));
@@ -187,9 +185,9 @@ Log::setConfig(Configure::consume('Log'));
 Security::setSalt(Configure::consume('Security.salt'));
 
 /*
- * Setup detectors for mobile and tablet.
- * If you don't use these checks you can safely remove this code
- * and the mobiledetect package from composer.json.
+ * Configurar detectores para dispositivos móviles y tabletas.
+ * Si no usas estas comprobaciones, puedes eliminar de forma segura este código
+ * y el paquete mobiledetect de composer.json.
  */
 ServerRequest::addDetector('mobile', function ($request) {
     $detector = new \Detection\MobileDetect();
@@ -202,32 +200,4 @@ ServerRequest::addDetector('tablet', function ($request) {
     return $detector->isTablet();
 });
 
-/*
- * You can enable default locale format parsing by adding calls
- * to `useLocaleParser()`. This enables the automatic conversion of
- * locale specific date formats when processing request data. For details see
- * @link https://book.cakephp.org/5/en/core-libraries/internationalization-and-localization.html#parsing-localized-datetime-data
- */
-// \Cake\Database\TypeFactory::build('time')->useLocaleParser();
-// \Cake\Database\TypeFactory::build('date')->useLocaleParser();
-// \Cake\Database\TypeFactory::build('datetime')->useLocaleParser();
-// \Cake\Database\TypeFactory::build('timestamp')->useLocaleParser();
-// \Cake\Database\TypeFactory::build('datetimefractional')->useLocaleParser();
-// \Cake\Database\TypeFactory::build('timestampfractional')->useLocaleParser();
-// \Cake\Database\TypeFactory::build('datetimetimezone')->useLocaleParser();
-// \Cake\Database\TypeFactory::build('timestamptimezone')->useLocaleParser();
 
-/*
- * Custom Inflector rules, can be set to correctly pluralize or singularize
- * table, model, controller names or whatever other string is passed to the
- * inflection functions.
- */
-// \Cake\Utility\Inflector::rules('plural', ['/^(inflect)or$/i' => '\1ables']);
-// \Cake\Utility\Inflector::rules('irregular', ['red' => 'redlings']);
-// \Cake\Utility\Inflector::rules('uninflected', ['dontinflectme']);
-
-// set a custom date and time format
-// see https://book.cakephp.org/5/en/core-libraries/time.html#setting-the-default-locale-and-format-string
-// and https://unicode-org.github.io/icu/userguide/format_parse/datetime/#datetime-format-syntax
-// \Cake\I18n\Date::setToStringFormat('dd.MM.yyyy');
-// \Cake\I18n\Time::setToStringFormat('dd.MM.yyyy HH:mm');
