@@ -1,29 +1,107 @@
 msgid "_ACCIONES"
 msgstr "Acciones"
 
+msgid "_ACCIONES_TAG"
+msgstr "Acciones"
+
+msgid "_ANADIR_NOTICIA"
+msgstr "Añadir noticia"
+
 msgid "_ANADIR_TAG"
 msgstr "Añadir tag"
 
-msgid "_BORRAR"
-msgstr "Borrar"
+msgid "_ANADIR_USUARIO"
+msgstr "Añadir usuario"
+
+msgid "_ACTIVO"
+msgstr "Activo"
+
+msgid "_APELLIDO"
+msgstr "Apellido"
+
+msgid "_APODO"
+msgstr "Apodo"
 
 msgid "_BLOG"
 msgstr "Blog Gestión"
 
+msgid "_BORRAR"
+msgstr "Borrar"
+
+msgid "_BORRAR_NEWS"
+msgstr "Borrar noticia"
+
+msgid "_BORRAR_NOTICIAS"
+msgstr "Borrar noticias"
+
+msgid "_BORRAR_TAGS"
+msgstr "Borrar tags"
+
+msgid "_BORRAR_USUARIOS"
+msgstr "Borrar usuarios"
+
 msgid "_CONFIRMACION_BORRAR"
 msgstr "¿Estás seguro que quieres borrar el elemento {0}?"
+
+
+msgid "_CONTRASENA"
+msgstr "Contraseña"
+
 
 msgid "_CREAR"
 msgstr "Crear"
 
+msgid "_CREADO"
+msgstr "Creado"
+
+msgid "_CUERPO"
+msgstr "Contenido"
+
 msgid "_DESCRIPCION"
 msgstr "Descripción"
+
+msgid "_EDITAR"
+msgstr "Editar"
+
+msgid "_EDITAR_NEWS"
+msgstr "Editar noticia"
 
 msgid "_EDITAR_TAGS"
 msgstr "Editar tags"
 
+msgid "_EDITAR_USUARIO"
+msgstr "Editar usuario"
+
+msgid "_EMAIL"
+msgstr "Email"
+
+
+msgid "_ENVIAR"
+msgstr "Enviar"
+
+msgid "_INICIAR_SESION"
+msgstr "Iniciar sesión"
+
+msgid "_LISTA_NEWS"
+msgstr "Lista noticias"
+
+msgid "_LISTA_NOTICIAS"
+msgstr "Lista de noticias"
+
 msgid "_LISTA_TAGS"
 msgstr "Lista tags"
+
+msgid "_LISTA_USUARIOS"
+msgstr "Lista usuarios"
+
+msgid "_LOGIN"
+msgstr "Iniciar sesión"
+
+msgid "_MODIFICADO"
+msgstr "Modificado"
+
+msgid "_NO"
+msgstr "No"
 
 msgid "_NOMBRE"
 msgstr "Nombre"
@@ -34,10 +112,46 @@ msgstr "Noticias"
 msgid "_NOTICIAS_RELACIONADAS"
 msgstr "Noticias relacionadas"
 
+msgid "_NUE"
+msgstr "Nueva noticia"
+
+msgid "_NUEVA_NOTICIA"
+msgstr "Nueva noticia"
+
+msgid "_NUEVO_USUARIO"
+msgstr "Nuevo usuario"
+
+msgid "_POR_FAVOR_INGRESE_USUARIO_CONTRASENA"
+msgstr "Por favor ingrese su usuario y contraseña"
+
+msgid "_SI"
+msgstr "Sí"
+
+msgid "_SLUG"
+msgstr "Slug"
+
 msgid "_TAGS"
 msgstr "Tags"
 
+msgid "_TAGS_RELACIONADOS"
+msgstr "Tags relacionados"
+
+msgid "_TITULO"
+msgstr "Título"
+
+msgid "_USER_ID"
+msgstr "ID de Usuario"
+
+
+msgid "_USUARIO"
+msgstr "Usuario"
+
 msgid "_USUARIOS"
 msgstr "Usuarios"
+
+msgid "_VER"
+msgstr "Ver"
+
+
 
 

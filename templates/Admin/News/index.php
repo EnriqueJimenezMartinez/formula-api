@@ -5,8 +5,8 @@
  */
 ?>
 <div class="news index content">
-    <?= $this->Html->link(__('New News'), ['action' => 'add'], ['class' => 'button float-right']) ?>
-    <h3><?= __('News') ?></h3>
+    <?= $this->Html->link(__('_NUEVA_NOTICIA'), ['action' => 'add'], ['class' => 'button float-right']) ?>
+    <h3><?= __('_NOTICIAS') ?></h3>
     <div class="table-responsive">
         <table>
             <thead>
@@ -32,14 +32,14 @@
                     <td><?= h($news->created) ?></td>
                     <td><?= h($news->modified) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $news->id]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $news->id]) ?>
+                        <?= $this->Html->link(__('_VER'), ['action' => 'view', $news->id]) ?>
+                        <?= $this->Html->link(__('_EDITAR'), ['action' => 'edit', $news->id]) ?>
                         <?= $this->Form->postLink(
-                            __('Delete'),
+                            __('_BORRAR'),
                             ['action' => 'delete', $news->id],
                             [
                                 'method' => 'delete',
-                                'confirm' => __('Are you sure you want to delete # {0}?', $news->id),
+                                'confirm' => __("_CONFIRMACION_BORRAR", $news->id),
                             ]
                         ) ?>
                     </td>

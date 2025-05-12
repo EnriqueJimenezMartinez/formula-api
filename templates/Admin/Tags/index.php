@@ -6,17 +6,17 @@
 ?>
 <div class="tags index content">
     <?= $this->Html->link(__('New Tag'), ['action' => 'add'], ['class' => 'button float-right']) ?>
-    <h3><?= __('Tags') ?></h3>
+    <h3><?= __('_TAGS') ?></h3>
     <div class="table-responsive">
         <table>
             <thead>
                 <tr>
-                    <th><?= $this->Paginator->sort('id') ?></th>
-                    <th><?= $this->Paginator->sort('name') ?></th>
-                    <th><?= $this->Paginator->sort('description') ?></th>
-                    <th><?= $this->Paginator->sort('created') ?></th>
-                    <th><?= $this->Paginator->sort('modified') ?></th>
-                    <th class="actions"><?= __('Actions') ?></th>
+                    <th><?= $this->Paginator->sort('id', __('ID')) ?></th>
+                    <th><?= $this->Paginator->sort('name', __('_NOMBRE')) ?></th>
+                    <th><?= $this->Paginator->sort('description', __('_DESCRIPCION')) ?></th>
+                    <th><?= $this->Paginator->sort('created', __('_CREADO')) ?></th>
+                    <th><?= $this->Paginator->sort('modified', __('_MODIFICADO')) ?></th>
+                    <th class="actions"><?= __('_ACCIONES') ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -28,14 +28,14 @@
                     <td><?= h($tag->created) ?></td>
                     <td><?= h($tag->modified) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $tag->id]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $tag->id]) ?>
+                        <?= $this->Html->link(__('_VER'), ['action' => 'view', $tag->id]) ?>
+                        <?= $this->Html->link(__('_EDITAR'), ['action' => 'edit', $tag->id]) ?>
                         <?= $this->Form->postLink(
-                            __('Delete'),
+                            __('_BORRAR'),
                             ['action' => 'delete', $tag->id],
                             [
                                 'method' => 'delete',
-                                'confirm' => __('Are you sure you want to delete # {0}?', $tag->id),
+                                'confirm' => __("_CONFIRMACION_BORRAR", $tag->id),
                             ]
                         ) ?>
                     </td>

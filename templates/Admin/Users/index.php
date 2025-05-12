@@ -5,10 +5,10 @@
  */
 ?>
 <div class="users index content">
-    <?= $this->Html->link(__('New User'), ['action' => 'add'], ['class' => 'button float-right']) ?>
+    <?= $this->Html->link(__('_NUEVO_USUARIO'), ['action' => 'add'], ['class' => 'button float-right']) ?>
     <?= $this->Html->link(__('Logout'), ['action' => 'logout'], ['class' => 'button float-left']) ?>
 
-    <h3><?= __('Users') ?></h3>
+    <h3><?= __('_USUARIOS') ?></h3>
     <div class="table-responsive">
         <table>
             <thead>
@@ -36,14 +36,14 @@
                     <td><?= h($user->created) ?></td>
                     <td><?= h($user->modified) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $user->id]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->id]) ?>
+                        <?= $this->Html->link(__('_VER'), ['action' => 'view', $user->id]) ?>
+                        <?= $this->Html->link(__('_EDITAR'), ['action' => 'edit', $user->id]) ?>
                         <?= $this->Form->postLink(
-                            __('Delete'),
+                            __('_BORRAR'),
                             ['action' => 'delete', $user->id],
                             [
                                 'method' => 'delete',
-                                'confirm' => __('Are you sure you want to delete # {0}?', $user->id),
+                                'confirm' => __("_CONFIRMACION_BORRAR", $user->id),
                             ]
                         ) ?>
                     </td>

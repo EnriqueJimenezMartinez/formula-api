@@ -7,11 +7,11 @@
 <div class="row">
     <aside class="column">
         <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('Edit User'), ['action' => 'edit', $user->id], ['class' => 'side-nav-item']) ?>
-            <?= $this->Form->postLink(__('Delete User'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id), 'class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('List Users'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('New User'), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
+            <h4 class="heading"><?= __('_ACCIONES') ?></h4>
+            <?= $this->Html->link(__('_EDITAR_USUARIOS'), ['action' => 'edit', $user->id], ['class' => 'side-nav-item']) ?>
+            <?= $this->Form->postLink(__('_BORRAR_USUARIOS'), ['action' => 'delete', $user->id], ['confirm' => __('_CONFIRMAR_BORRADO', $user->id), 'class' => 'side-nav-item']) ?>
+            <?= $this->Html->link(__('_LISTA_USUARIO'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
+            <?= $this->Html->link(__('_NUEVO_USUARIO'), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
         </div>
     </aside>
     <div class="column column-80">
@@ -19,54 +19,54 @@
             <h3><?= h($user->name) ?></h3>
             <table>
                 <tr>
-                    <th><?= __('Name') ?></th>
+                    <th><?= __('_NOMBRE') ?></th>
                     <td><?= h($user->name) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Surname') ?></th>
+                    <th><?= __('_APELLIDO') ?></th>
                     <td><?= h($user->surname) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Nickname') ?></th>
+                    <th><?= __('_APODO') ?></th>
                     <td><?= h($user->nickname) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Email') ?></th>
+                    <th><?= __('_EMAIL') ?></th>
                     <td><?= h($user->email) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Id') ?></th>
+                    <th><?= __('id') ?></th>
                     <td><?= $this->Number->format($user->id) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Created') ?></th>
+                    <th><?= __('_CREADO') ?></th>
                     <td><?= h($user->created) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Modified') ?></th>
+                    <th><?= __('_MODIFICADO') ?></th>
                     <td><?= h($user->modified) ?></td>
                 </tr>
                 <tr>
-                    <th><?= __('Is Active') ?></th>
-                    <td><?= $user->is_active ? __('Yes') : __('No'); ?></td>
+                    <th><?= __('_ACTIVO') ?></th>
+                    <td><?= $user->is_active ? __('_SI') : __('_NO'); ?></td>
                 </tr>
             </table>
             <div class="related">
-                <h4><?= __('Related News') ?></h4>
+                <h4><?= __('_NOTICIAS_RELACIONADAS') ?></h4>
                 <?php if (!empty($user->news)) : ?>
                 <div class="table-responsive">
                     <table>
                         <tr>
-                            <th><?= __('Id') ?></th>
-                            <th><?= __('Title') ?></th>
-                            <th><?= __('Slug') ?></th>
-                            <th><?= __('Description') ?></th>
-                            <th><?= __('Body') ?></th>
-                            <th><?= __('User Id') ?></th>
-                            <th><?= __('Is Active') ?></th>
-                            <th><?= __('Created') ?></th>
-                            <th><?= __('Modified') ?></th>
-                            <th class="actions"><?= __('Actions') ?></th>
+                            <th><?= __('_ID') ?></th>
+                            <th><?= __('_TITULO') ?></th>
+                            <th><?= __('_SLUG') ?></th>
+                            <th><?= __('_DESCRIPCION') ?></th>
+                            <th><?= __('_CUERPO') ?></th>
+                            <th><?= __('_USER_ID') ?></th>
+                            <th><?= __('_ACTIVO') ?></th>
+                            <th><?= __('_CREADO') ?></th>
+                            <th><?= __('_MODIFICADO') ?></th>
+                            <th class="actions"><?= __('_ACCIONES') ?></th>
                         </tr>
                         <?php foreach ($user->news as $news) : ?>
                         <tr>
@@ -80,14 +80,14 @@
                             <td><?= h($news->created) ?></td>
                             <td><?= h($news->modified) ?></td>
                             <td class="actions">
-                                <?= $this->Html->link(__('View'), ['controller' => 'News', 'action' => 'view', $news->id]) ?>
-                                <?= $this->Html->link(__('Edit'), ['controller' => 'News', 'action' => 'edit', $news->id]) ?>
+                                <?= $this->Html->link(__('_VER'), ['controller' => 'News', 'action' => 'view', $news->id]) ?>
+                                <?= $this->Html->link(__('_EDITAR'), ['controller' => 'News', 'action' => 'edit', $news->id]) ?>
                                 <?= $this->Form->postLink(
-                                    __('Delete'),
+                                    __('_BORRAR'),
                                     ['controller' => 'News', 'action' => 'delete', $news->id],
                                     [
                                         'method' => 'delete',
-                                        'confirm' => __('Are you sure you want to delete # {0}?', $news->id),
+                                        'confirm' => __('_CONFIRMACION_BORRAR', $news->id),
                                     ]
                                 ) ?>
                             </td>
@@ -100,3 +100,4 @@
         </div>
     </div>
 </div>
+
