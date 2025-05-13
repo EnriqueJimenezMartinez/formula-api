@@ -11,7 +11,7 @@
             <?= $this->Form->postLink(
                 __('Delete'),
                 ['action' => 'delete', $user->id],
-                ['confirm' => __('_CONFIRMACION_BORRAR', $tag->id), 'class' => 'side-nav-item']
+                ['confirm' => __('_CONFIRMACION_BORRAR', $user->id), 'class' => 'side-nav-item']
             ) ?>
             <?= $this->Html->link(__('_LISTA_USUARIOS'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
         </div>

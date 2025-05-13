@@ -13,14 +13,14 @@
             <?= $this->Form->postLink(
                 __('_BORRAR'),
                 ['action' => 'delete', $news->id],
-                ['confirm' => __('_CONFIRMACION_BORRAR', $tag->id), 'class' => 'side-nav-item']
+                ['confirm' => __('_CONFIRMACION_BORRAR', $news->id), 'class' => 'side-nav-item']
             ) ?>
             <?= $this->Html->link(__('_LISTA_NEWS'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
         </div>
     </aside>
     <div class="column column-80">
         <div class="news form content">
-            <?= $this->Form->create($news) ?>
+            <?= $this->Form->create($news, ['type' => 'file']) ?>
             <fieldset>
                 <legend><?= __('_EDITAR_NEWS') ?></legend>
                 <?php

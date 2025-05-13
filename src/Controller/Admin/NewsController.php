@@ -44,22 +44,47 @@ class NewsController extends AppController
      *
      * @return \Cake\Http\Response|null|void Redirige en caso de éxito, renderiza la vista en caso contrario.
      */
-    public function add()
-    {
-        $news = $this->News->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $news = $this->News->patchEntity($news, $this->request->getData());
-            if ($this->News->save($news)) {
-                $this->Flash->success(__('La noticia ha sido guardada.'));
+        public function add()
+        {
+            $news = $this->News->newEmptyEntity();
+            if ($this->request->is('post')) {
+                $data = $this->request->getData();
+                $image = $data['image_file'] ?? null;
 
-                return $this->redirect(['action' => 'index']);
+                $news = $this->News->patchEntity($news, $data);
+
+                if ($this->News->save($news)) {
+                    
+                    if ($image instanceof \Laminas\Diactoros\UploadedFile && $image->getError() === UPLOAD_ERR_OK) {
+                        $extension = pathinfo($image->getClientFilename(), PATHINFO_EXTENSION);
+                        $filename = $news->slug . '.' . strtolower($extension);
+
+                        $targetDir = WWW_ROOT . 'img/news/';
+                        if (!file_exists($targetDir)) {
+                            mkdir($targetDir, 0755, true);
+                        }
+
+                        $targetPath = $targetDir . $filename;
+                        try {
+                            $image->moveTo($targetPath);
+                            $this->Flash->success(__('Imagen subida correctamente como: {0}', 'img/news/' . $filename));
+                        } catch (\Throwable $e) {
+                            $this->Flash->error(__('Error al mover la imagen: {0}', $e->getMessage()));
+                        }
+                    }
+
+                    $this->Flash->success(__('La noticia ha sido guardada.'));
+                    return $this->redirect(['action' => 'index']);
+                }
+
+                $this->Flash->error(__('La noticia no pudo ser guardada. Por favor, intente nuevamente.'));
             }
-            $this->Flash->error(__('La noticia no pudo ser guardada. Por favor, intente nuevamente.'));
+
+            $users = $this->News->Users->find('list', limit: 200)->all();
+            $tags = $this->News->Tags->find('list', limit: 200)->all();
+            $this->set(compact('news', 'users', 'tags'));
         }
-        $users = $this->News->Users->find('list', limit: 200)->all();
-        $tags = $this->News->Tags->find('list', limit: 200)->all();
-        $this->set(compact('news', 'users', 'tags'));
-    }
+
 
     /**
      * Método Edit
@@ -68,22 +93,49 @@ class NewsController extends AppController
      * @return \Cake\Http\Response|null|void Redirige en caso de éxito, renderiza la vista en caso contrario.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException Si no se encuentra el registro.
      */
-    public function edit(?string $id = null)
-    {
-        $news = $this->News->get($id, contain: ['Tags']);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $news = $this->News->patchEntity($news, $this->request->getData());
-            if ($this->News->save($news)) {
-                $this->Flash->success(__('La noticia ha sido guardada.'));
+        public function edit(?string $id = null)
+        {
+            $news = $this->News->get($id, contain: ['Tags']);
 
-                return $this->redirect(['action' => 'index']);
+            if ($this->request->is(['patch', 'post', 'put'])) {
+                $data = $this->request->getData();
+                $image = $data['image_file'] ?? null;
+
+                $news = $this->News->patchEntity($news, $data);
+
+                if ($this->News->save($news)) {
+                    if ($image instanceof \Laminas\Diactoros\UploadedFile && $image->getError() === UPLOAD_ERR_OK) {
+                        $extension = pathinfo($image->getClientFilename(), PATHINFO_EXTENSION);
+                        $filename = $news->slug . '.' . strtolower($extension);
+
+                        $targetDir = WWW_ROOT . 'img/news/';
+                        if (!file_exists($targetDir)) {
+                            mkdir($targetDir, 0755, true);
+                        }
+
+                        $targetPath = $targetDir . $filename;
+                        try {
+                            $image->moveTo($targetPath);
+                            $this->Flash->success(__('Imagen actualizada correctamente como: {0}', 'img/news/' . $filename));
+                        } catch (\Throwable $e) {
+                            $this->Flash->error(__('Error al mover la imagen: {0}', $e->getMessage()));
+                        }
+                    }
+
+                    $this->Flash->success(__('La noticia ha sido guardada.'));
+                    return $this->redirect(['action' => 'index']);
+                }
+
+                $this->Flash->error(__('La noticia no pudo ser guardada.'));
             }
-            $this->Flash->error(__('La noticia no pudo ser guardada. Por favor, intente nuevamente.'));
+
+            $users = $this->News->Users->find('list', limit: 200)->all();
+            $tags = $this->News->Tags->find('list', limit: 200)->all();
+            $this->set(compact('news', 'users', 'tags'));
         }
-        $users = $this->News->Users->find('list', limit: 200)->all();
-        $tags = $this->News->Tags->find('list', limit: 200)->all();
-        $this->set(compact('news', 'users', 'tags'));
-    }
+
+
+
 
     /**
      * Método Delete

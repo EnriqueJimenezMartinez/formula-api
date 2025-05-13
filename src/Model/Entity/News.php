@@ -41,4 +41,11 @@ class News extends Entity
         'tags' => true, // Etiquetas asociadas.
         'image_file' => true, // Archivo de imagen asociado a la noticia.
     ];
+
+    /**
+     * Campos virtuales (no existen en la base de datos).
+     *
+     * @var array<string>
+     */
+    protected array $_virtual = ['image_file'];
 }
