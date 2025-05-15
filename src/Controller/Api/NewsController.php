@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace App\Controller\Api;
 
-use DateTime;
-
 /**
  * News Controller
  *
@@ -27,10 +25,10 @@ class NewsController extends ApiController
      *
      * @return \Cake\Http\Response|null|void Renders view
      */
-       public function index()
+    public function index()
     {
         $query = $this->News->find()
-            ->contain(['Users', 'Tags']);
+         ->contain(['Users', 'Tags']);
 
         $news = $this->paginate($query);
 
@@ -50,26 +48,19 @@ class NewsController extends ApiController
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view(?string $slug = null)
-{
-    $news = $this->News->find('all', [
+    {
+        $news = $this->News->find('all', [
         'where' => ['slug IS' => $slug],
         'contain' => ['Users', 'Tags'],
-    ])->first();
+        ])->first();
 
-    if ($news) {
-        $news->image_url = $this->getImageUrl($news->slug);
+        if ($news) {
+            $news->image_url = $this->getImageUrl($news->slug);
+        }
+
+        $this->respond($news);
     }
 
-    $this->respond($news);
-}
-
-
-    /**
-     * LastDate method
-     *
-     * @param string|null $date The input date string.
-     * @return void
-     */
    /* public function lastDate(?string $date): void
     {
         if (!$date) {
@@ -92,23 +83,29 @@ class NewsController extends ApiController
         $respuesta = [$lastNews, $date];
         $this->respond($respuesta);
     }*/
-     private function getImageUrl(string $slug)
-{
-    $webroot = $this->request->getAttribute('webroot') ?? '/';
-    $server = $this->request->getServerParams();
-    $host = $server['HTTP_HOST'] ?? 'localhost';
+    /**
+     * getImageUrl method
+     *
+     * @param string|null.
+     * @return void
+     */
+    private function getImageUrl(string $slug)
+    {
+        $webroot = $this->request->getAttribute('webroot') ?? '/';
+        $server = $this->request->getServerParams();
+        $host = $server['HTTP_HOST'] ?? 'localhost';
 
-    $imageDir = WWW_ROOT . 'img/news/';
-    $urlBase = 'http://' . $host . $webroot . 'img/news/';
-    $extensions = ['jpg', 'png', 'webp'];
+        $imageDir = WWW_ROOT . 'img/news/';
+        $urlBase = 'http://' . $host . $webroot . 'img/news/';
+        $extensions = ['jpg', 'png', 'webp'];
 
-    foreach ($extensions as $ext) {
-        $filename = $slug . '.' . $ext;
-        $filePath = $imageDir . $filename;
+        foreach ($extensions as $ext) {
+            $filename = $slug . '.' . $ext;
+            $filePath = $imageDir . $filename;
 
-        if (file_exists($filePath)) {
-            return $urlBase . $filename;
+            if (file_exists($filePath)) {
+                return $urlBase . $filename;
+            }
         }
     }
-}
 }
