@@ -67,51 +67,54 @@ class UsersTable extends Table
      * @return \Cake\Validation\Validator Validador configurado.
      */
     public function validationDefault(Validator $validator): Validator
-    {
-        $validator
-            ->scalar('name')
-            ->maxLength('name', 50, __('_NOMBRE_MAX_50_CARACTERES')) // Longitud máxima personalizada
-            ->requirePresence('name', 'create') // Requiere en creación
-            ->notEmptyString('name', __('_NOMBRE_NECESARIO')); // No puede estar vacío
+{
+    $validator
+        ->scalar('name', 'El nombre debe ser una cadena de texto')
+        ->maxLength('name', 50, 'El nombre no puede tener más de 50 caracteres')
+        ->requirePresence('name', 'create', 'El nombre es obligatorio')
+        ->notEmptyString('name', 'El nombre no puede estar vacío');
 
-        $validator
-            ->scalar('surname')
-            ->maxLength('surname', 150)
-            ->requirePresence('surname', 'create')
-            ->notEmptyString('surname');
+    $validator
+        ->scalar('surname', 'El apellido debe ser una cadena de texto')
+        ->maxLength('surname', 150, 'El apellido no puede tener más de 150 caracteres')
+        ->requirePresence('surname', 'create', 'El apellido es obligatorio')
+        ->notEmptyString('surname', 'El apellido no puede estar vacío');
 
-        $validator
-            ->scalar('nickname')
-            ->maxLength('nickname', 50)
-            ->requirePresence('nickname', 'create')
-            ->notEmptyString('nickname')
-            ->add('nickname', 'unique', [
-                'rule' => 'validateUnique',
-                'provider' => 'table',
-            ]); // Debe ser único
+    $validator
+        ->scalar('nickname', 'El apodo debe ser una cadena de texto')
+        ->maxLength('nickname', 50, 'El apodo no puede tener más de 50 caracteres')
+        ->requirePresence('nickname', 'create', 'El apodo es obligatorio')
+        ->notEmptyString('nickname', 'El apodo no puede estar vacío')
+        ->add('nickname', 'unique', [
+            'rule' => 'validateUnique',
+            'provider' => 'table',
+            'message' => 'Este apodo ya está en uso',
+        ]);
 
-        $validator
-            ->email('email') // Formato de email
-            ->requirePresence('email', 'create')
-            ->notEmptyString('email')
-            ->add('email', 'unique', [
-                'rule' => 'validateUnique',
-                'provider' => 'table',
-            ]);
+    $validator
+        ->email('email', false, 'El formato del correo electrónico no es válido')
+        ->requirePresence('email', 'create', 'El correo electrónico es obligatorio')
+        ->notEmptyString('email', 'El correo electrónico no puede estar vacío')
+        ->add('email', 'unique', [
+            'rule' => 'validateUnique',
+            'provider' => 'table',
+            'message' => 'Este correo electrónico ya está registrado',
+        ]);
 
-        $validator
-            ->scalar('password')
-            ->maxLength('password', 255)
-            ->requirePresence('password', 'create')
-            ->notEmptyString('password');
+    $validator
+        ->scalar('password', 'La contraseña debe ser una cadena de texto')
+        ->maxLength('password', 255, 'La contraseña no puede tener más de 255 caracteres')
+        ->requirePresence('password', 'create', 'La contraseña es obligatoria')
+        ->notEmptyString('password', 'La contraseña no puede estar vacía');
 
-        $validator
-            ->boolean('is_active')
-            ->requirePresence('is_active', 'create')
-            ->notEmptyString('is_active');
+    $validator
+        ->boolean('is_active', 'El campo "activo" debe ser verdadero o falso')
+        ->requirePresence('is_active', 'create', 'El campo "activo" es obligatorio')
+        ->notEmptyString('is_active', 'El campo "activo" no puede estar vacío');
 
-        return $validator;
-    }
+    return $validator;
+}
+
 
     /**
      * Reglas de integridad para la aplicación.

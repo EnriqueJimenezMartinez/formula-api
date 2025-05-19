@@ -57,19 +57,20 @@ class TagsTable extends Table
      * @return \Cake\Validation\Validator
      */
     public function validationDefault(Validator $validator): Validator
-    {
-        $validator
-            ->scalar('name')
-            ->maxLength('name', 50)
-            ->requirePresence('name', 'create')
-            ->notEmptyString('name', __('_NOMBRE_NO_VACIO'));
+{
+    $validator
+        ->scalar('name', 'El nombre debe ser una cadena de texto')
+        ->maxLength('name', 50, 'El nombre no puede tener más de 50 caracteres')
+        ->requirePresence('name', 'create', 'El nombre es obligatorio')
+        ->notEmptyString('name', 'El nombre no puede estar vacío');
 
-        $validator
-            ->scalar('description')
-            ->maxLength('description', 255)
-            ->requirePresence('description', 'create')
-            ->notEmptyString('description');
+    $validator
+        ->scalar('description', 'La descripción debe ser una cadena de texto')
+        ->maxLength('description', 255, 'La descripción no puede tener más de 255 caracteres')
+        ->requirePresence('description', 'create', 'La descripción es obligatoria')
+        ->notEmptyString('description', 'La descripción no puede estar vacía');
 
-        return $validator;
-    }
+    return $validator;
+}
+
 }
