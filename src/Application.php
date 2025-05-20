@@ -75,16 +75,6 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             // Añade el middleware de rutas, necesario para procesar URLs
             ->add(new RoutingMiddleware($this))
 
-            // Middleware personalizado para permitir CORS
-            ->add(new CorsMiddleware([
-            'allowedOrigins' => ['https://formula-front.vercel.app'],
-            'allowedMethods' => ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
-            'allowedHeaders' => ['*'],
-            'exposedHeaders' => [],
-            'maxAge' => 300,
-            'allowCredentials'=>true,
-            ]))
-
             // Convierte automáticamente el cuerpo de las peticiones a un array accesible
             ->add(new BodyParserMiddleware())
 
@@ -104,8 +94,11 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             return $prefix === 'api';
         });
 
-        $middlewareQueue->add($csrf);
+        $middlewareQueue->add($csrf)
 
+        // Middleware personalizado para permitir CORS
+        ->add(new CorsMiddleware());
+        
         return $middlewareQueue;
     }
 
