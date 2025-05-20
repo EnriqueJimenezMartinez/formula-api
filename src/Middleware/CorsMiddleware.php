@@ -16,7 +16,7 @@ class CorsMiddleware implements MiddlewareInterface
     {
         $allowedOrigins = [
             'http://localhost:5174',
-            'https://formula-front.vercel.app/'
+            'https://formula-front.vercel.app'
         ];
 
         $origin = $request->getHeaderLine('Origin');
