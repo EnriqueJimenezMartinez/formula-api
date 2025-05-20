@@ -108,4 +108,10 @@ class NewsController extends ApiController
             }
         }
     }
+
+    public function corsTest()
+    {
+        $this->set(['ok' => true]);
+        $this->viewBuilder()->setOption('serialize',['ok']);
+    }
 }
