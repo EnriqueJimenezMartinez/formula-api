@@ -101,10 +101,7 @@ class ApiController extends BaseController
     ): void {
         $this->response = $this->response
             ->withType('application/json')
-            ->withStatus($code)
-            ->withHeader('Access-Control-Allow-Origin', 'https://formula-front.vercel.app')
-            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE')
-            ->withHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, Accept, Authorization');
-        $this->set(compact('status', 'data','message'));
+            ->withStatus($code);
+        $this->set(compact('status', 'data', 'message'));
     }
 }
