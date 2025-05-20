@@ -17,11 +17,11 @@ class UsersController extends AppController
     }
 
     public function index()
-    {
+    {   
         $query = $this->Users->find();
         $users = $this->paginate($query);
-
         $this->set(compact('users'));
+
     }
 
     public function view(?string $id = null)
@@ -84,7 +84,7 @@ class UsersController extends AppController
                 'usuario_logueado',                // nombre
                 $user->get('username') ?? 'user', // valor (string, no null)
                 new DateTimeImmutable('+1 hour'), // expiración
-                '/',                              
+                '/',
                 null,
                 false,
                 true
@@ -112,6 +112,7 @@ class UsersController extends AppController
         if ($result && $result->isValid()) {
             $this->Authentication->logout();
 
+            $this->request->getSession()->delete('usuario_logueado');
             // Crear cookie expirado para borrar cookie
             $expiredCookie = (new Cookie('usuario_logueado', ''))
                 ->withExpired(new DateTimeImmutable('-1 hour'));
