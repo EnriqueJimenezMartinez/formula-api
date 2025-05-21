@@ -19,16 +19,26 @@ class CorsMiddleware implements MiddlewareInterface
 
         $origin = $request->getHeaderLine('Origin');
 
+        // Procesa la petición normalmente, incluso si hay error
         $response = $handler->handle($request);
 
+        // Permite solo los orígenes autorizados
         if (in_array($origin, $allowedOrigins, true)) {
             $response = $response
                 ->withHeader('Access-Control-Allow-Origin', $origin)
-                ->withHeader('Access-Control-Allow-Credentials', 'true');
+                ->withHeader('Access-Control-Allow-Credentials', 'true'); // Cambia a 'true' si usas autenticación
         }
 
-        return $response
+        // Añade SIEMPRE los métodos y headers permitidos
+        $response = $response
             ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
             ->withHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, Accept, Authorization');
+
+        // Si es OPTIONS, corta la respuesta aquí (opcional, pero más rápido)
+        if (strtoupper($request->getMethod()) === 'OPTIONS') {
+            return $response->withStatus(200);
+        }
+
+        return $response;
     }
 }

@@ -23,7 +23,6 @@ use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\Routing\Router;
 use Psr\Http\Message\ServerRequestInterface;
-use App\Middleware\AllowOptionsMiddleware;
 
 /**
  * Clase principal de configuración de la aplicación.
@@ -79,8 +78,6 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             // Convierte automáticamente el cuerpo de las peticiones a un array accesible
             ->add(new BodyParserMiddleware())
 
-            ->add(new AllowOptionsMiddleware())
-
             // Middleware de autenticación (identifica al usuario en cada petición)
             ->add(new AuthenticationMiddleware($this));
 
@@ -101,7 +98,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
 
         // Middleware personalizado para permitir CORS
         ->add(new CorsMiddleware());
-
+        
         return $middlewareQueue;
     }
 
