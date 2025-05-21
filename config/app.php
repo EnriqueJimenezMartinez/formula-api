@@ -16,7 +16,7 @@ return [
      * Modo de desarrollo:
      * verdadero: Se muestran errores y advertencias.
      */
-    'debug' => filter_var(env('DEBUG', false), FILTER_VALIDATE_BOOLEAN),
+    'debug' => false,
 
     /*
      * Configura la información básica de la aplicación.

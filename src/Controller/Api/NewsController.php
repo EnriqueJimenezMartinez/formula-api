@@ -107,7 +107,7 @@ class NewsController extends ApiController
         $host = $server['HTTP_HOST'] ?? 'localhost';
 
         $imageDir = WWW_ROOT . 'img/news/';
-        $urlBase = 'http://' . $host . $webroot . 'img/news/';
+        $urlBase = 'https://' . $host . $webroot . 'img/news/';
         $extensions = ['jpg', 'png', 'webp'];
 
         foreach ($extensions as $ext) {
