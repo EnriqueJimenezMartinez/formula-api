@@ -52,6 +52,7 @@ use Psr\Http\Server\RequestHandlerInterface;
         return $response;
     }
 }*/
+
 class CorsMiddleware implements MiddlewareInterface
 {
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -64,7 +65,7 @@ class CorsMiddleware implements MiddlewareInterface
 
 
             return $response
-                ->withHeader('Access-Control-Allow-Origin', '*')
+                ->withHeader('Access-Control-Allow-Origin', 'https://formula-front.vercel.app')
                 ->withHeader('Access-Control-Allow-Credentials', 'true')
                 ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
                 ->withHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
