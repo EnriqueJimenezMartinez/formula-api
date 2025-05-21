@@ -67,6 +67,9 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                 'exceptionRenderer' => ApiExceptionRenderer::class,
             ], $this))
 
+            // Middleware personalizado para permitir CORS
+            ->add(new CorsMiddleware())
+
             // Gestiona los archivos estáticos de plugins y temas
             ->add(new AssetMiddleware([
                 'cacheTime' => Configure::read('Asset.cacheTime'),
@@ -74,9 +77,6 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
 
             // Añade el middleware de rutas, necesario para procesar URLs
             ->add(new RoutingMiddleware($this))
-
-            // Middleware personalizado para permitir CORS
-            ->add(new CorsMiddleware())
 
             // Convierte automáticamente el cuerpo de las peticiones a un array accesible
             ->add(new BodyParserMiddleware())

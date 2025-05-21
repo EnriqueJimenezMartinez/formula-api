@@ -1,5 +1,4 @@
 <?php
-// src/Middleware/CorsMiddleware.php
 declare(strict_types=1);
 
 namespace App\Middleware;
@@ -16,22 +15,40 @@ class CorsMiddleware implements MiddlewareInterface
     {
         $allowedOrigins = [
             'http://localhost:5174',
-            'https://formula-front.vercel.app'
+            'https://formula-front.vercel.app',
         ];
 
         $origin = $request->getHeaderLine('Origin');
-        $response = strtoupper($request->getMethod()) === 'OPTIONS'
-            ? new Response()
-            : $handler->handle($request);
+        $method = strtoupper($request->getMethod());
+
+        // Si la petición es OPTIONS (preflight), responde rápido con headers
+        if ($method === 'OPTIONS') {
+            $response = new Response();
+
+            if (in_array($origin, $allowedOrigins, true)) {
+                return $response
+                    ->withHeader('Access-Control-Allow-Origin', $origin)
+                    ->withHeader('Access-Control-Allow-Credentials', 'true')
+                    ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+                    ->withHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+                    ->withStatus(200);
+            }
+
+            // Si no es un origen permitido, no añades headers
+            return $response->withStatus(403);
+        }
+
+        // Para peticiones normales (GET, POST, etc)
+        $response = $handler->handle($request);
 
         if (in_array($origin, $allowedOrigins, true)) {
             $response = $response
                 ->withHeader('Access-Control-Allow-Origin', $origin)
-                ->withHeader('Access-Control-Allow-Credentials', 'false');
+                ->withHeader('Access-Control-Allow-Credentials', 'true')
+                ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+                ->withHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
         }
 
-        return $response
-            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
-            ->withHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+        return $response;
     }
 }

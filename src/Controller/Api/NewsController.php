@@ -47,19 +47,32 @@ class NewsController extends ApiController
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view(?string $slug = null)
-    {
-        $news = $this->News->find('all', [
-        'where' => ['slug IS' => $slug],
-        'contain' => ['Users', 'Tags'],
-        ])->first();
+    public function view()
+{
+    
+    $slug = $this->request->getData('slug');
 
-        if ($news) {
-            $news->image_url = $this->getImageUrl($news->slug);
-        }
-
-        $this->respond($news);
+    if (!$slug) {
+        $this->respond(null, 'error', 'Slug no proporcionado', 400);
+        return;
     }
+
+    $news = $this->News->find('all', [
+        'conditions' => ['slug' => $slug],
+        'contain' => ['Users', 'Tags'],
+    ])->first();
+
+    if (!$news) {
+        // Noticia no encontrada
+        $this->respond(null, 'error', 'Noticia no encontrada', 404);
+        return;
+    }
+
+    $news->image_url = $this->getImageUrl($news->slug);
+
+    $this->respond($news);
+}
+
 
    /* public function lastDate(?string $date): void
     {
