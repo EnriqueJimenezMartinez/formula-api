@@ -76,14 +76,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             ->add(new RoutingMiddleware($this))
 
             // Middleware personalizado para permitir CORS
-            ->add(new CorsMiddleware([
-            'allowedOrigins' => ['https://formula-front.vercel.app'],
-            'allowedMethods' => ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
-            'allowedHeaders' => ['*'],
-            'exposedHeaders' => [],
-            'maxAge' => 300,
-            'allowCredentials'=>true,
-            ]))
+            ->add(new CorsMiddleware())
 
             // Convierte automáticamente el cuerpo de las peticiones a un array accesible
             ->add(new BodyParserMiddleware())
