@@ -49,7 +49,6 @@ class NewsController extends ApiController
      */
     public function view()
 {
-    
     $slug = $this->request->getData('slug');
 
     if (!$slug) {
@@ -57,13 +56,12 @@ class NewsController extends ApiController
         return;
     }
 
-    $news = $this->News->find('all', [
-        'conditions' => ['slug' => $slug],
-        'contain' => ['Users', 'Tags'],
-    ])->first();
+    $news = $this->News->find()
+        ->where(['slug' => $slug])
+        ->contain(['Users', 'Tags'])
+        ->first();
 
     if (!$news) {
-        // Noticia no encontrada
         $this->respond(null, 'error', 'Noticia no encontrada', 404);
         return;
     }
