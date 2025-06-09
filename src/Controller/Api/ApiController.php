@@ -35,7 +35,7 @@ class ApiController extends BaseController
      *
      * Use this method to add common initialization code like loading components.
      *
-     * e.g. `$this->loadComponent('FormProtection');`
+     * e.g. `$this->loadComponent('FormProtection');w`
      *
      * @return void
      */

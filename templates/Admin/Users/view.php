@@ -8,9 +8,9 @@
     <aside class="column">
         <div class="side-nav">
             <h4 class="heading"><?= __('_ACCIONES') ?></h4>
-            <?= $this->Html->link(__('_EDITAR_USUARIOS'), ['action' => 'edit', $user->id], ['class' => 'side-nav-item']) ?>
+            <?= $this->Html->link(__('Editar Usuarios'), ['action' => 'edit', $user->id], ['class' => 'side-nav-item']) ?>
             <?= $this->Form->postLink(__('_BORRAR_USUARIOS'), ['action' => 'delete', $user->id], ['confirm' => __('_CONFIRMAR_BORRADO', $user->id), 'class' => 'side-nav-item']) ?>
-            <?= $this->Html->link(__('_LISTA_USUARIO'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
+            <?= $this->Html->link(__('Lista Usuarios'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
             <?= $this->Html->link(__('_NUEVO_USUARIO'), ['action' => 'add'], ['class' => 'side-nav-item']) ?>
         </div>
     </aside>
