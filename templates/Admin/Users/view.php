@@ -61,9 +61,7 @@
                             <th><?= __('_TITULO') ?></th>
                             <th><?= __('_SLUG') ?></th>
                             <th><?= __('_DESCRIPCION') ?></th>
-                            <th><?= __('_CUERPO') ?></th>
                             <th><?= __('_USER_ID') ?></th>
-                            <th><?= __('_ACTIVO') ?></th>
                             <th><?= __('_CREADO') ?></th>
                             <th><?= __('_MODIFICADO') ?></th>
                             <th class="actions"><?= __('_ACCIONES') ?></th>
@@ -74,9 +72,7 @@
                             <td><?= h($news->title) ?></td>
                             <td><?= h($news->slug) ?></td>
                             <td><?= h($news->description) ?></td>
-                            <td><?= h($news->body) ?></td>
                             <td><?= h($news->user_id) ?></td>
-                            <td><?= h($news->is_active) ?></td>
                             <td><?= h($news->created) ?></td>
                             <td><?= h($news->modified) ?></td>
                             <td class="actions">

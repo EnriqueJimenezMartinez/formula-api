@@ -11,7 +11,7 @@
         <table>
             <thead>
                 <tr>
-                    <th><?= $this->Paginator->sort('id','Id') ?></th>
+                    <th><?= $this->Paginator->sort('id','ID') ?></th>
                     <th><?= $this->Paginator->sort('name','Nombre') ?></th>
                     <th><?= $this->Paginator->sort('surname','Apellido') ?></th>
                     <th><?= $this->Paginator->sort('nickname','Nombre de Usuario') ?></th>

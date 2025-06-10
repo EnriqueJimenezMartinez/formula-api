@@ -100,7 +100,7 @@
                 $imgFolder = 'img/news/';
                 $files = glob(WWW_ROOT . $imgFolder . '*');
                 $foundImage = null;
-                                    
+
                 foreach ($files as $file) {
                     if (str_contains(basename($file), (string)$news->id)) {
                         $foundImage = $imgFolder . basename($file);

@@ -155,4 +155,16 @@ class NewsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    public function logout()
+    {
+        $result = $this->Authentication->getResult();
+        if ($result && $result->isValid()) {
+            $this->Authentication->logout();
+
+            $this->request->getSession()->delete('usuario_logueado');
+
+            return $this->redirect(['controller' => 'Users', 'action' => 'login']);
+        }
+    }
 }
