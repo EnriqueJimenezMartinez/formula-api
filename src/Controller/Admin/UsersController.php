@@ -6,22 +6,22 @@ namespace App\Controller\Admin;
 use App\Controller\AppController;
 use Cake\Event\EventInterface;
 use Cake\Http\Cookie\Cookie;
-use DateTimeImmutable;
+use Cake\Mailer\Mailer;
 
 class UsersController extends AppController
 {
     public function beforeFilter(EventInterface $event)
     {
         parent::beforeFilter($event);
-        $this->Authentication->addUnauthenticatedActions(['login', 'add']);
+        // Permitir acciones sin estar autenticado
+        $this->Authentication->addUnauthenticatedActions(['login', 'verify2fa', 'add']);
     }
 
     public function index()
-    {   
+    {
         $query = $this->Users->find();
         $users = $this->paginate($query);
         $this->set(compact('users'));
-
     }
 
     public function view(?string $id = null)
@@ -67,42 +67,83 @@ class UsersController extends AppController
         } else {
             $this->Flash->error(__('El usuario no pudo ser eliminado. Por favor, intente nuevamente.'));
         }
-
         return $this->redirect(['action' => 'index']);
     }
 
     public function login()
     {
         $this->request->allowMethod(['get', 'post']);
-        $result = $this->Authentication->getResult();
+        $session = $this->request->getSession();
 
-        if ($result && $result->isValid()) {
-            $user = $this->request->getAttribute('identity');
+        if ($this->request->is('post')) {
+            $data = $this->request->getData();
+            $user = $this->Users->findByEmail($data['email'])->first();
 
-            // Crear cookie con valor válido (string)
+            if (!$user || !password_verify($data['password'], $user->password)) {
+                $this->Flash->error(__('Usuario o contraseña inválidos'));
+                return;
+            }
+
+            // Generar código 2FA de 6 dígitos (string con ceros a la izquierda)
+            $code = str_pad((string)random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+            // Guardar código, user_id y expiración en sesión (5 minutos)
+            $session->write('TwoFactor.code', $code);
+            $session->write('TwoFactor.user_id', $user->id);
+            $session->write('TwoFactor.expires', time() + 300);
+
+            // Enviar email con el código
+            $mailer = new Mailer('default');
+            $mailer->setTo($user->email)
+                ->setSubject('Código de verificación 2FA')
+                ->deliver("Tu código de verificación es: $code. Expira en 5 minutos.");
+
+            // Redirigir para ingresar código 2FA
+            return $this->redirect(['action' => 'verify2fa']);
+        }
+    }
+
+    public function verify2fa()
+    {
+        $session = $this->request->getSession();
+
+        if ($this->request->is('post')) {
+            $codeInput = $this->request->getData('code');
+            $codeSaved = $session->read('TwoFactor.code');
+            $userId = $session->read('TwoFactor.user_id');
+            $expires = $session->read('TwoFactor.expires');
+
+            if (!$codeSaved || !$userId || time() > $expires) {
+                $this->Flash->error('El código 2FA ha expirado o no es válido.');
+                return $this->redirect(['action' => 'login']);
+            }
+
+            if ($codeInput !== $codeSaved) {
+                $this->Flash->error('Código 2FA incorrecto.');
+                return;
+            }
+
+            // Código correcto: limpiar sesión 2FA
+            $session->delete('TwoFactor');
+
+            // Loguear usuario
+            $user = $this->Users->get($userId);
+            $this->Authentication->setIdentity($user);
+
+            // Crear cookie usuario_logueado igual que antes
             $cookie = new Cookie(
-                'usuario_logueado',                // nombre
-                $user->get('username') ?? 'user', // valor (string, no null)
-                new DateTimeImmutable('+1 hour'), // expiración
+                'usuario_logueado',
+                $user->username ?? 'user',
+                new \DateTimeImmutable('+1 hour'),
                 '/',
                 null,
                 false,
                 true
             );
-
-            // Añadir cookie a la respuesta
             $this->response = $this->response->withCookie($cookie);
 
-            $redirect = $this->request->getQuery('redirect', [
-                'controller' => 'Users',
-                'action' => 'index',
-            ]);
-
-            return $this->redirect($redirect);
-        }
-
-        if ($this->request->is('post') && (!$result || !$result->isValid())) {
-            $this->Flash->error(__('Usuario o contraseña inválidos'));
+            // Redirigir al index (o dashboard)
+            return $this->redirect(['action' => 'index']);
         }
     }
 
@@ -115,7 +156,7 @@ class UsersController extends AppController
             $this->request->getSession()->delete('usuario_logueado');
             // Crear cookie expirado para borrar cookie
             $expiredCookie = (new Cookie('usuario_logueado', ''))
-                ->withExpired(new DateTimeImmutable('-1 hour'));
+                ->withExpired(new \DateTimeImmutable('-1 hour'));
 
             $this->response = $this->response->withExpiredCookie($expiredCookie);
 
